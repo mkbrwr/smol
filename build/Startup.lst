@@ -1,0 +1,124 @@
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"Startup.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Startup.c"
+  20              		.section	.text.Reset_Handler,"ax",%progbits
+  21              		.align	1
+  22              		.global	Reset_Handler
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	Reset_Handler:
+  28              	.LFB0:
+   1:Startup.c     **** #include <stdint.h>
+   2:Startup.c     **** #include <stddef.h>
+   3:Startup.c     **** 
+   4:Startup.c     **** extern int main(int argc, char *argv[]);
+   5:Startup.c     **** 
+   6:Startup.c     **** void Reset_Handler(void) {
+  29              		.loc 1 6 26
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 00AF     		add	r7, sp, #0
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_register 7
+   7:Startup.c     ****     main(0, NULL);
+  41              		.loc 1 7 5
+  42 0004 0021     		movs	r1, #0
+  43 0006 0020     		movs	r0, #0
+  44 0008 FFF7FEFF 		bl	main
+   8:Startup.c     **** }
+  45              		.loc 1 8 1
+  46 000c 00BF     		nop
+  47 000e 80BD     		pop	{r7, pc}
+  48              		.cfi_endproc
+  49              	.LFE0:
+  51              		.section	.text.interrupt,"ax",%progbits
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s 			page 2
+
+
+  52              		.align	1
+  53              		.global	interrupt
+  54              		.syntax unified
+  55              		.thumb
+  56              		.thumb_func
+  58              	interrupt:
+  59              	.LFB1:
+   9:Startup.c     **** 
+  10:Startup.c     **** void interrupt(void) {
+  60              		.loc 1 10 22
+  61              		.cfi_startproc
+  62              		@ args = 0, pretend = 0, frame = 0
+  63              		@ frame_needed = 1, uses_anonymous_args = 0
+  64              		@ link register save eliminated.
+  65 0000 80B4     		push	{r7}
+  66              	.LCFI2:
+  67              		.cfi_def_cfa_offset 4
+  68              		.cfi_offset 7, -4
+  69 0002 00AF     		add	r7, sp, #0
+  70              	.LCFI3:
+  71              		.cfi_def_cfa_register 7
+  72              	.L3:
+  11:Startup.c     ****     while (1) {}
+  73              		.loc 1 11 11
+  74 0004 00BF     		nop
+  75 0006 FDE7     		b	.L3
+  76              		.cfi_endproc
+  77              	.LFE1:
+  79              		.global	vector_table
+  80              		.section	.isr_vector,"aw"
+  81              		.align	2
+  84              	vector_table:
+  85 0000 FCFF0020 		.word	536936444
+  86 0004 00000000 		.word	Reset_Handler
+  87 0008 00000000 		.word	interrupt
+  88 000c 00000000 		.word	interrupt
+  89 0010 00000000 		.word	interrupt
+  90 0014 00000000 		.word	interrupt
+  91 0018 00000000 		.word	interrupt
+  92 001c 00000000 		.word	0
+  93 0020 00000000 		.space	424
+  93      00000000 
+  93      00000000 
+  93      00000000 
+  93      00000000 
+  94              		.text
+  95              	.Letext0:
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 Startup.c
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s:21     .text.Reset_Handler:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s:27     .text.Reset_Handler:00000000 Reset_Handler
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s:52     .text.interrupt:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s:58     .text.interrupt:00000000 interrupt
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s:84     .isr_vector:00000000 vector_table
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccMCyJXm.s:81     .isr_vector:00000000 $d
+
+UNDEFINED SYMBOLS
+main

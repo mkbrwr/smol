@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "SwiftModule-Swift.h"
 
 int main(void)
 {
@@ -10,15 +11,18 @@ int main(void)
 
   // led off
   *((uint32_t *)(0x40021800 + 0x18)) = 0x20000000;
-  
+
   while (1) {
+    if (!myFooFunc()) {
+        return 0;
+    }
     // led on
     *((uint32_t *)(0x40021800 + 0x18)) = 0x2000;
     for (volatile int i = 0; i < 100000; i++) {
     }
     // led off
     *((uint32_t *)(0x40021800 + 0x18)) = 0x20000000;
-    for (volatile int i = 0; i < 300000; i++) {
+    for (volatile int i = 0; i < 600000; i++) {
     }
   }
 }
