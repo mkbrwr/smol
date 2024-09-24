@@ -6,7 +6,7 @@ TARGET = STM32SMOL
 # debug build?
 DEBUG = 1
 # optimization
-#OPT = -Og
+# OPT = -Og
 
 #######################################
 # paths
@@ -104,6 +104,12 @@ vpath %.swift $(sort $(dir $(SWIFT_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+
+$(BUILD_DIR)/%.o: %.swift Makefile | $(BUILD_DIR)
+	swiftc -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -no-allocations -parse-as-library \
+	-import-bridging-header Bridging-Header.h \
+	-Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=hard \
+    -c hello.swift -o build/hello.o
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@

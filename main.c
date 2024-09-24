@@ -1,5 +1,12 @@
+#include <stdbool.h>
 #include <stdint.h>
-#include "SwiftModule-Swift.h"
+
+extern bool $$s5hello7StrooctV9myFooFuncSbyF(void);
+extern bool $$s5hello09SomethingB0PAAE7fizBuzzSbyFAA7StrooctV_Tgq5(void);
+
+int siuuufoo() {
+    return 42;
+}
 
 int main(void)
 {
@@ -13,7 +20,7 @@ int main(void)
   *((uint32_t *)(0x40021800 + 0x18)) = 0x20000000;
 
   while (1) {
-    if (!myFooFunc()) {
+    if ($$s5hello09SomethingB0PAAE7fizBuzzSbyFAA7StrooctV_Tgq5()) {
         return 0;
     }
     // led on
