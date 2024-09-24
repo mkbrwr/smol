@@ -13,3 +13,6 @@ swiftc -frontend -typecheck \
 
 # Install command
 % stm32-programmer-cli -c port=SWD -d build/STM32SMOL.bin 0x08000000 -v -rst
+
+# Here's what you should see on the screen
+![IMG_4341](https://github.com/user-attachments/assets/65bcaab6-7a10-462e-a1d3-e63990f6ce91)
