@@ -9,8 +9,8 @@ extension SomethingSomething {
 }
 
 public struct Strooct {
-    public func myFooFunc() -> Bool {
-        return siuuufoo() == 42
+    public func myFooFunc() -> Int {
+        return 10
     }
 }
 
