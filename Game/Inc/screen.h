@@ -1,8 +1,8 @@
-#ifndef _BRIDGING_HEADER
-#define _BRIDGING_HEADER
-#include <stdint.h>
+#ifndef __SCREEN_H
+#define __SCREEN_H
 
-int siuuufoo();
+#define SCREEN_WIDHT 320
+#define SCREEN_HEIGHT 240
 
 typedef struct {
   char a;
@@ -11,17 +11,8 @@ typedef struct {
   char b;
 } ScreenColor;
 
-typedef enum
-{
-  LED3 = 0,
-  LED4 = 1
-} Led_TypeDef;
-
-
-uint32_t getPixelDataAt(uint32_t w, uint32_t h);
-void BSP_LED_Toggle(Led_TypeDef Led);
 void screen_clear(ScreenColor color);
 void screen_write_pixel(unsigned int Xpos, unsigned int Ypos, ScreenColor color, float in_pixel_depth);
 void screen_flush(void);
 
-#endif
+#endif /*__SCREEN_H */

@@ -1,0 +1,1080 @@
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"ili9341.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/Components/ili9341/ili9341.c"
+  20              		.global	ili9341_drv
+  21              		.section	.data.ili9341_drv,"aw"
+  22              		.align	2
+  25              	ili9341_drv:
+  26 0000 00000000 		.word	ili9341_Init
+  27 0004 00000000 		.word	ili9341_ReadID
+  28 0008 00000000 		.word	ili9341_DisplayOn
+  29 000c 00000000 		.word	ili9341_DisplayOff
+  30 0010 00000000 		.word	0
+  31 0014 00000000 		.word	0
+  32 0018 00000000 		.word	0
+  33 001c 00000000 		.word	0
+  34 0020 00000000 		.word	0
+  35 0024 00000000 		.word	0
+  36 0028 00000000 		.word	ili9341_GetLcdPixelWidth
+  37 002c 00000000 		.word	ili9341_GetLcdPixelHeight
+  38 0030 00000000 		.word	0
+  39 0034 00000000 		.word	0
+  40              		.section	.text.ili9341_Init,"ax",%progbits
+  41              		.align	1
+  42              		.global	ili9341_Init
+  43              		.syntax unified
+  44              		.thumb
+  45              		.thumb_func
+  47              	ili9341_Init:
+  48              	.LFB0:
+   1:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+   2:Drivers/BSP/Components/ili9341/ili9341.c ****   ******************************************************************************
+   3:Drivers/BSP/Components/ili9341/ili9341.c ****   * @file    ili9341.c
+   4:Drivers/BSP/Components/ili9341/ili9341.c ****   * @author  MCD Application Team
+   5:Drivers/BSP/Components/ili9341/ili9341.c ****   * @version V1.0.2
+   6:Drivers/BSP/Components/ili9341/ili9341.c ****   * @date    02-December-2014
+   7:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief   This file includes the LCD driver for ILI9341 LCD.
+   8:Drivers/BSP/Components/ili9341/ili9341.c ****   ******************************************************************************
+   9:Drivers/BSP/Components/ili9341/ili9341.c ****   * @attention
+  10:Drivers/BSP/Components/ili9341/ili9341.c ****   *
+  11:Drivers/BSP/Components/ili9341/ili9341.c ****   * Copyright (c) 2014 STMicroelectronics.
+  12:Drivers/BSP/Components/ili9341/ili9341.c ****   * All rights reserved.
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 2
+
+
+  13:Drivers/BSP/Components/ili9341/ili9341.c ****   *
+  14:Drivers/BSP/Components/ili9341/ili9341.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  15:Drivers/BSP/Components/ili9341/ili9341.c ****   * in the root directory of this software component.
+  16:Drivers/BSP/Components/ili9341/ili9341.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  17:Drivers/BSP/Components/ili9341/ili9341.c ****   *
+  18:Drivers/BSP/Components/ili9341/ili9341.c ****   ******************************************************************************
+  19:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  20:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  21:Drivers/BSP/Components/ili9341/ili9341.c **** /* Includes ------------------------------------------------------------------*/
+  22:Drivers/BSP/Components/ili9341/ili9341.c **** #include "ili9341.h"
+  23:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  24:Drivers/BSP/Components/ili9341/ili9341.c **** /** @addtogroup BSP
+  25:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  26:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  27:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  28:Drivers/BSP/Components/ili9341/ili9341.c **** /** @addtogroup Components
+  29:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  30:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  31:Drivers/BSP/Components/ili9341/ili9341.c ****   
+  32:Drivers/BSP/Components/ili9341/ili9341.c **** /** @addtogroup ILI9341
+  33:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief This file provides a set of functions needed to drive the 
+  34:Drivers/BSP/Components/ili9341/ili9341.c ****   *        ILI9341 LCD.
+  35:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  36:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+  37:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  38:Drivers/BSP/Components/ili9341/ili9341.c **** /** @defgroup ILI9341_Private_TypesDefinitions
+  39:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  40:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  41:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+  42:Drivers/BSP/Components/ili9341/ili9341.c ****   * @}
+  43:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  44:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  45:Drivers/BSP/Components/ili9341/ili9341.c **** /** @defgroup ILI9341_Private_Defines
+  46:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  47:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+  48:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+  49:Drivers/BSP/Components/ili9341/ili9341.c ****   * @}
+  50:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  51:Drivers/BSP/Components/ili9341/ili9341.c ****   
+  52:Drivers/BSP/Components/ili9341/ili9341.c **** /** @defgroup ILI9341_Private_Macros
+  53:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  54:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+  55:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+  56:Drivers/BSP/Components/ili9341/ili9341.c ****   * @}
+  57:Drivers/BSP/Components/ili9341/ili9341.c ****   */  
+  58:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  59:Drivers/BSP/Components/ili9341/ili9341.c **** /** @defgroup ILI9341_Private_Variables
+  60:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  61:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  62:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  63:Drivers/BSP/Components/ili9341/ili9341.c **** LCD_DrvTypeDef   ili9341_drv = 
+  64:Drivers/BSP/Components/ili9341/ili9341.c **** {
+  65:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_Init,
+  66:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_ReadID,
+  67:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_DisplayOn,
+  68:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_DisplayOff,
+  69:Drivers/BSP/Components/ili9341/ili9341.c ****   0,
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 3
+
+
+  70:Drivers/BSP/Components/ili9341/ili9341.c ****   0,
+  71:Drivers/BSP/Components/ili9341/ili9341.c ****   0,
+  72:Drivers/BSP/Components/ili9341/ili9341.c ****   0,
+  73:Drivers/BSP/Components/ili9341/ili9341.c ****   0,
+  74:Drivers/BSP/Components/ili9341/ili9341.c ****   0,
+  75:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_GetLcdPixelWidth,
+  76:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_GetLcdPixelHeight,
+  77:Drivers/BSP/Components/ili9341/ili9341.c ****   0,
+  78:Drivers/BSP/Components/ili9341/ili9341.c ****   0,    
+  79:Drivers/BSP/Components/ili9341/ili9341.c **** };
+  80:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  81:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+  82:Drivers/BSP/Components/ili9341/ili9341.c ****   * @}
+  83:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  84:Drivers/BSP/Components/ili9341/ili9341.c ****   
+  85:Drivers/BSP/Components/ili9341/ili9341.c **** /** @defgroup ILI9341_Private_FunctionPrototypes
+  86:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  87:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+  88:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  89:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+  90:Drivers/BSP/Components/ili9341/ili9341.c ****   * @}
+  91:Drivers/BSP/Components/ili9341/ili9341.c ****   */ 
+  92:Drivers/BSP/Components/ili9341/ili9341.c ****   
+  93:Drivers/BSP/Components/ili9341/ili9341.c **** /** @defgroup ILI9341_Private_Functions
+  94:Drivers/BSP/Components/ili9341/ili9341.c ****   * @{
+  95:Drivers/BSP/Components/ili9341/ili9341.c ****   */   
+  96:Drivers/BSP/Components/ili9341/ili9341.c **** 
+  97:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+  98:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Power on the LCD.
+  99:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  None
+ 100:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval None
+ 101:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 102:Drivers/BSP/Components/ili9341/ili9341.c **** void ili9341_Init(void)
+ 103:Drivers/BSP/Components/ili9341/ili9341.c **** {
+  49              		.loc 1 103 1
+  50              		.cfi_startproc
+  51              		@ args = 0, pretend = 0, frame = 0
+  52              		@ frame_needed = 1, uses_anonymous_args = 0
+  53 0000 80B5     		push	{r7, lr}
+  54              	.LCFI0:
+  55              		.cfi_def_cfa_offset 8
+  56              		.cfi_offset 7, -8
+  57              		.cfi_offset 14, -4
+  58 0002 00AF     		add	r7, sp, #0
+  59              	.LCFI1:
+  60              		.cfi_def_cfa_register 7
+ 104:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Initialize ILI9341 low level bus layer ----------------------------------*/
+ 105:Drivers/BSP/Components/ili9341/ili9341.c ****   LCD_IO_Init();
+  61              		.loc 1 105 3
+  62 0004 FFF7FEFF 		bl	LCD_IO_Init
+ 106:Drivers/BSP/Components/ili9341/ili9341.c ****   
+ 107:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Configure LCD */
+ 108:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(0xCA);
+  63              		.loc 1 108 3
+  64 0008 CA20     		movs	r0, #202
+  65 000a FFF7FEFF 		bl	ili9341_WriteReg
+ 109:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0xC3);
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 4
+
+
+  66              		.loc 1 109 3
+  67 000e C320     		movs	r0, #195
+  68 0010 FFF7FEFF 		bl	ili9341_WriteData
+ 110:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x08);
+  69              		.loc 1 110 3
+  70 0014 0820     		movs	r0, #8
+  71 0016 FFF7FEFF 		bl	ili9341_WriteData
+ 111:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x50);
+  72              		.loc 1 111 3
+  73 001a 5020     		movs	r0, #80
+  74 001c FFF7FEFF 		bl	ili9341_WriteData
+ 112:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_POWERB);
+  75              		.loc 1 112 3
+  76 0020 CF20     		movs	r0, #207
+  77 0022 FFF7FEFF 		bl	ili9341_WriteReg
+ 113:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+  78              		.loc 1 113 3
+  79 0026 0020     		movs	r0, #0
+  80 0028 FFF7FEFF 		bl	ili9341_WriteData
+ 114:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0xC1);
+  81              		.loc 1 114 3
+  82 002c C120     		movs	r0, #193
+  83 002e FFF7FEFF 		bl	ili9341_WriteData
+ 115:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x30);
+  84              		.loc 1 115 3
+  85 0032 3020     		movs	r0, #48
+  86 0034 FFF7FEFF 		bl	ili9341_WriteData
+ 116:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_POWER_SEQ);
+  87              		.loc 1 116 3
+  88 0038 ED20     		movs	r0, #237
+  89 003a FFF7FEFF 		bl	ili9341_WriteReg
+ 117:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x64);
+  90              		.loc 1 117 3
+  91 003e 6420     		movs	r0, #100
+  92 0040 FFF7FEFF 		bl	ili9341_WriteData
+ 118:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x03);
+  93              		.loc 1 118 3
+  94 0044 0320     		movs	r0, #3
+  95 0046 FFF7FEFF 		bl	ili9341_WriteData
+ 119:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x12);
+  96              		.loc 1 119 3
+  97 004a 1220     		movs	r0, #18
+  98 004c FFF7FEFF 		bl	ili9341_WriteData
+ 120:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x81);
+  99              		.loc 1 120 3
+ 100 0050 8120     		movs	r0, #129
+ 101 0052 FFF7FEFF 		bl	ili9341_WriteData
+ 121:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_DTCA);
+ 102              		.loc 1 121 3
+ 103 0056 E820     		movs	r0, #232
+ 104 0058 FFF7FEFF 		bl	ili9341_WriteReg
+ 122:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x85);
+ 105              		.loc 1 122 3
+ 106 005c 8520     		movs	r0, #133
+ 107 005e FFF7FEFF 		bl	ili9341_WriteData
+ 123:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 108              		.loc 1 123 3
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 5
+
+
+ 109 0062 0020     		movs	r0, #0
+ 110 0064 FFF7FEFF 		bl	ili9341_WriteData
+ 124:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x78);
+ 111              		.loc 1 124 3
+ 112 0068 7820     		movs	r0, #120
+ 113 006a FFF7FEFF 		bl	ili9341_WriteData
+ 125:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_POWERA);
+ 114              		.loc 1 125 3
+ 115 006e CB20     		movs	r0, #203
+ 116 0070 FFF7FEFF 		bl	ili9341_WriteReg
+ 126:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x39);
+ 117              		.loc 1 126 3
+ 118 0074 3920     		movs	r0, #57
+ 119 0076 FFF7FEFF 		bl	ili9341_WriteData
+ 127:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x2C);
+ 120              		.loc 1 127 3
+ 121 007a 2C20     		movs	r0, #44
+ 122 007c FFF7FEFF 		bl	ili9341_WriteData
+ 128:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 123              		.loc 1 128 3
+ 124 0080 0020     		movs	r0, #0
+ 125 0082 FFF7FEFF 		bl	ili9341_WriteData
+ 129:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x34);
+ 126              		.loc 1 129 3
+ 127 0086 3420     		movs	r0, #52
+ 128 0088 FFF7FEFF 		bl	ili9341_WriteData
+ 130:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x02);
+ 129              		.loc 1 130 3
+ 130 008c 0220     		movs	r0, #2
+ 131 008e FFF7FEFF 		bl	ili9341_WriteData
+ 131:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_PRC);
+ 132              		.loc 1 131 3
+ 133 0092 F720     		movs	r0, #247
+ 134 0094 FFF7FEFF 		bl	ili9341_WriteReg
+ 132:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x20);
+ 135              		.loc 1 132 3
+ 136 0098 2020     		movs	r0, #32
+ 137 009a FFF7FEFF 		bl	ili9341_WriteData
+ 133:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_DTCB);
+ 138              		.loc 1 133 3
+ 139 009e EA20     		movs	r0, #234
+ 140 00a0 FFF7FEFF 		bl	ili9341_WriteReg
+ 134:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 141              		.loc 1 134 3
+ 142 00a4 0020     		movs	r0, #0
+ 143 00a6 FFF7FEFF 		bl	ili9341_WriteData
+ 135:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 144              		.loc 1 135 3
+ 145 00aa 0020     		movs	r0, #0
+ 146 00ac FFF7FEFF 		bl	ili9341_WriteData
+ 136:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_FRMCTR1);
+ 147              		.loc 1 136 3
+ 148 00b0 B120     		movs	r0, #177
+ 149 00b2 FFF7FEFF 		bl	ili9341_WriteReg
+ 137:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 150              		.loc 1 137 3
+ 151 00b6 0020     		movs	r0, #0
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 6
+
+
+ 152 00b8 FFF7FEFF 		bl	ili9341_WriteData
+ 138:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x1B);
+ 153              		.loc 1 138 3
+ 154 00bc 1B20     		movs	r0, #27
+ 155 00be FFF7FEFF 		bl	ili9341_WriteData
+ 139:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_DFC);
+ 156              		.loc 1 139 3
+ 157 00c2 B620     		movs	r0, #182
+ 158 00c4 FFF7FEFF 		bl	ili9341_WriteReg
+ 140:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x0A);
+ 159              		.loc 1 140 3
+ 160 00c8 0A20     		movs	r0, #10
+ 161 00ca FFF7FEFF 		bl	ili9341_WriteData
+ 141:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0xA2);
+ 162              		.loc 1 141 3
+ 163 00ce A220     		movs	r0, #162
+ 164 00d0 FFF7FEFF 		bl	ili9341_WriteData
+ 142:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_POWER1);
+ 165              		.loc 1 142 3
+ 166 00d4 C020     		movs	r0, #192
+ 167 00d6 FFF7FEFF 		bl	ili9341_WriteReg
+ 143:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x10);
+ 168              		.loc 1 143 3
+ 169 00da 1020     		movs	r0, #16
+ 170 00dc FFF7FEFF 		bl	ili9341_WriteData
+ 144:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_POWER2);
+ 171              		.loc 1 144 3
+ 172 00e0 C120     		movs	r0, #193
+ 173 00e2 FFF7FEFF 		bl	ili9341_WriteReg
+ 145:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x10);
+ 174              		.loc 1 145 3
+ 175 00e6 1020     		movs	r0, #16
+ 176 00e8 FFF7FEFF 		bl	ili9341_WriteData
+ 146:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_VCOM1);
+ 177              		.loc 1 146 3
+ 178 00ec C520     		movs	r0, #197
+ 179 00ee FFF7FEFF 		bl	ili9341_WriteReg
+ 147:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x45);
+ 180              		.loc 1 147 3
+ 181 00f2 4520     		movs	r0, #69
+ 182 00f4 FFF7FEFF 		bl	ili9341_WriteData
+ 148:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x15);
+ 183              		.loc 1 148 3
+ 184 00f8 1520     		movs	r0, #21
+ 185 00fa FFF7FEFF 		bl	ili9341_WriteData
+ 149:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_VCOM2);
+ 186              		.loc 1 149 3
+ 187 00fe C720     		movs	r0, #199
+ 188 0100 FFF7FEFF 		bl	ili9341_WriteReg
+ 150:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x90);
+ 189              		.loc 1 150 3
+ 190 0104 9020     		movs	r0, #144
+ 191 0106 FFF7FEFF 		bl	ili9341_WriteData
+ 151:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_MAC);
+ 192              		.loc 1 151 3
+ 193 010a 3620     		movs	r0, #54
+ 194 010c FFF7FEFF 		bl	ili9341_WriteReg
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 7
+
+
+ 152:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0xC8);
+ 195              		.loc 1 152 3
+ 196 0110 C820     		movs	r0, #200
+ 197 0112 FFF7FEFF 		bl	ili9341_WriteData
+ 153:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_3GAMMA_EN);
+ 198              		.loc 1 153 3
+ 199 0116 F220     		movs	r0, #242
+ 200 0118 FFF7FEFF 		bl	ili9341_WriteReg
+ 154:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 201              		.loc 1 154 3
+ 202 011c 0020     		movs	r0, #0
+ 203 011e FFF7FEFF 		bl	ili9341_WriteData
+ 155:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_RGB_INTERFACE);
+ 204              		.loc 1 155 3
+ 205 0122 B020     		movs	r0, #176
+ 206 0124 FFF7FEFF 		bl	ili9341_WriteReg
+ 156:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0xC2);
+ 207              		.loc 1 156 3
+ 208 0128 C220     		movs	r0, #194
+ 209 012a FFF7FEFF 		bl	ili9341_WriteData
+ 157:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_DFC);
+ 210              		.loc 1 157 3
+ 211 012e B620     		movs	r0, #182
+ 212 0130 FFF7FEFF 		bl	ili9341_WriteReg
+ 158:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x0A);
+ 213              		.loc 1 158 3
+ 214 0134 0A20     		movs	r0, #10
+ 215 0136 FFF7FEFF 		bl	ili9341_WriteData
+ 159:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0xA7);
+ 216              		.loc 1 159 3
+ 217 013a A720     		movs	r0, #167
+ 218 013c FFF7FEFF 		bl	ili9341_WriteData
+ 160:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x27);
+ 219              		.loc 1 160 3
+ 220 0140 2720     		movs	r0, #39
+ 221 0142 FFF7FEFF 		bl	ili9341_WriteData
+ 161:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x04);
+ 222              		.loc 1 161 3
+ 223 0146 0420     		movs	r0, #4
+ 224 0148 FFF7FEFF 		bl	ili9341_WriteData
+ 162:Drivers/BSP/Components/ili9341/ili9341.c ****   
+ 163:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Colomn address set */
+ 164:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_COLUMN_ADDR);
+ 225              		.loc 1 164 3
+ 226 014c 2A20     		movs	r0, #42
+ 227 014e FFF7FEFF 		bl	ili9341_WriteReg
+ 165:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 228              		.loc 1 165 3
+ 229 0152 0020     		movs	r0, #0
+ 230 0154 FFF7FEFF 		bl	ili9341_WriteData
+ 166:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 231              		.loc 1 166 3
+ 232 0158 0020     		movs	r0, #0
+ 233 015a FFF7FEFF 		bl	ili9341_WriteData
+ 167:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 234              		.loc 1 167 3
+ 235 015e 0020     		movs	r0, #0
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 8
+
+
+ 236 0160 FFF7FEFF 		bl	ili9341_WriteData
+ 168:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0xEF);
+ 237              		.loc 1 168 3
+ 238 0164 EF20     		movs	r0, #239
+ 239 0166 FFF7FEFF 		bl	ili9341_WriteData
+ 169:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Page address set */
+ 170:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_PAGE_ADDR);
+ 240              		.loc 1 170 3
+ 241 016a 2B20     		movs	r0, #43
+ 242 016c FFF7FEFF 		bl	ili9341_WriteReg
+ 171:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 243              		.loc 1 171 3
+ 244 0170 0020     		movs	r0, #0
+ 245 0172 FFF7FEFF 		bl	ili9341_WriteData
+ 172:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 246              		.loc 1 172 3
+ 247 0176 0020     		movs	r0, #0
+ 248 0178 FFF7FEFF 		bl	ili9341_WriteData
+ 173:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x01);
+ 249              		.loc 1 173 3
+ 250 017c 0120     		movs	r0, #1
+ 251 017e FFF7FEFF 		bl	ili9341_WriteData
+ 174:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x3F);
+ 252              		.loc 1 174 3
+ 253 0182 3F20     		movs	r0, #63
+ 254 0184 FFF7FEFF 		bl	ili9341_WriteData
+ 175:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_INTERFACE);
+ 255              		.loc 1 175 3
+ 256 0188 F620     		movs	r0, #246
+ 257 018a FFF7FEFF 		bl	ili9341_WriteReg
+ 176:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x01);
+ 258              		.loc 1 176 3
+ 259 018e 0120     		movs	r0, #1
+ 260 0190 FFF7FEFF 		bl	ili9341_WriteData
+ 177:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 261              		.loc 1 177 3
+ 262 0194 0020     		movs	r0, #0
+ 263 0196 FFF7FEFF 		bl	ili9341_WriteData
+ 178:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x06);
+ 264              		.loc 1 178 3
+ 265 019a 0620     		movs	r0, #6
+ 266 019c FFF7FEFF 		bl	ili9341_WriteData
+ 179:Drivers/BSP/Components/ili9341/ili9341.c ****   
+ 180:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_GRAM);
+ 267              		.loc 1 180 3
+ 268 01a0 2C20     		movs	r0, #44
+ 269 01a2 FFF7FEFF 		bl	ili9341_WriteReg
+ 181:Drivers/BSP/Components/ili9341/ili9341.c ****   LCD_Delay(200);
+ 270              		.loc 1 181 3
+ 271 01a6 C820     		movs	r0, #200
+ 272 01a8 FFF7FEFF 		bl	LCD_Delay
+ 182:Drivers/BSP/Components/ili9341/ili9341.c ****   
+ 183:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_GAMMA);
+ 273              		.loc 1 183 3
+ 274 01ac 2620     		movs	r0, #38
+ 275 01ae FFF7FEFF 		bl	ili9341_WriteReg
+ 184:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x01);
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 9
+
+
+ 276              		.loc 1 184 3
+ 277 01b2 0120     		movs	r0, #1
+ 278 01b4 FFF7FEFF 		bl	ili9341_WriteData
+ 185:Drivers/BSP/Components/ili9341/ili9341.c ****   
+ 186:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_PGAMMA);
+ 279              		.loc 1 186 3
+ 280 01b8 E020     		movs	r0, #224
+ 281 01ba FFF7FEFF 		bl	ili9341_WriteReg
+ 187:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x0F);
+ 282              		.loc 1 187 3
+ 283 01be 0F20     		movs	r0, #15
+ 284 01c0 FFF7FEFF 		bl	ili9341_WriteData
+ 188:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x29);
+ 285              		.loc 1 188 3
+ 286 01c4 2920     		movs	r0, #41
+ 287 01c6 FFF7FEFF 		bl	ili9341_WriteData
+ 189:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x24);
+ 288              		.loc 1 189 3
+ 289 01ca 2420     		movs	r0, #36
+ 290 01cc FFF7FEFF 		bl	ili9341_WriteData
+ 190:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x0C);
+ 291              		.loc 1 190 3
+ 292 01d0 0C20     		movs	r0, #12
+ 293 01d2 FFF7FEFF 		bl	ili9341_WriteData
+ 191:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x0E);
+ 294              		.loc 1 191 3
+ 295 01d6 0E20     		movs	r0, #14
+ 296 01d8 FFF7FEFF 		bl	ili9341_WriteData
+ 192:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x09);
+ 297              		.loc 1 192 3
+ 298 01dc 0920     		movs	r0, #9
+ 299 01de FFF7FEFF 		bl	ili9341_WriteData
+ 193:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x4E);
+ 300              		.loc 1 193 3
+ 301 01e2 4E20     		movs	r0, #78
+ 302 01e4 FFF7FEFF 		bl	ili9341_WriteData
+ 194:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x78);
+ 303              		.loc 1 194 3
+ 304 01e8 7820     		movs	r0, #120
+ 305 01ea FFF7FEFF 		bl	ili9341_WriteData
+ 195:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x3C);
+ 306              		.loc 1 195 3
+ 307 01ee 3C20     		movs	r0, #60
+ 308 01f0 FFF7FEFF 		bl	ili9341_WriteData
+ 196:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x09);
+ 309              		.loc 1 196 3
+ 310 01f4 0920     		movs	r0, #9
+ 311 01f6 FFF7FEFF 		bl	ili9341_WriteData
+ 197:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x13);
+ 312              		.loc 1 197 3
+ 313 01fa 1320     		movs	r0, #19
+ 314 01fc FFF7FEFF 		bl	ili9341_WriteData
+ 198:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x05);
+ 315              		.loc 1 198 3
+ 316 0200 0520     		movs	r0, #5
+ 317 0202 FFF7FEFF 		bl	ili9341_WriteData
+ 199:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x17);
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 10
+
+
+ 318              		.loc 1 199 3
+ 319 0206 1720     		movs	r0, #23
+ 320 0208 FFF7FEFF 		bl	ili9341_WriteData
+ 200:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x11);
+ 321              		.loc 1 200 3
+ 322 020c 1120     		movs	r0, #17
+ 323 020e FFF7FEFF 		bl	ili9341_WriteData
+ 201:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 324              		.loc 1 201 3
+ 325 0212 0020     		movs	r0, #0
+ 326 0214 FFF7FEFF 		bl	ili9341_WriteData
+ 202:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_NGAMMA);
+ 327              		.loc 1 202 3
+ 328 0218 E120     		movs	r0, #225
+ 329 021a FFF7FEFF 		bl	ili9341_WriteReg
+ 203:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x00);
+ 330              		.loc 1 203 3
+ 331 021e 0020     		movs	r0, #0
+ 332 0220 FFF7FEFF 		bl	ili9341_WriteData
+ 204:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x16);
+ 333              		.loc 1 204 3
+ 334 0224 1620     		movs	r0, #22
+ 335 0226 FFF7FEFF 		bl	ili9341_WriteData
+ 205:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x1B);
+ 336              		.loc 1 205 3
+ 337 022a 1B20     		movs	r0, #27
+ 338 022c FFF7FEFF 		bl	ili9341_WriteData
+ 206:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x04);
+ 339              		.loc 1 206 3
+ 340 0230 0420     		movs	r0, #4
+ 341 0232 FFF7FEFF 		bl	ili9341_WriteData
+ 207:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x11);
+ 342              		.loc 1 207 3
+ 343 0236 1120     		movs	r0, #17
+ 344 0238 FFF7FEFF 		bl	ili9341_WriteData
+ 208:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x07);
+ 345              		.loc 1 208 3
+ 346 023c 0720     		movs	r0, #7
+ 347 023e FFF7FEFF 		bl	ili9341_WriteData
+ 209:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x31);
+ 348              		.loc 1 209 3
+ 349 0242 3120     		movs	r0, #49
+ 350 0244 FFF7FEFF 		bl	ili9341_WriteData
+ 210:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x33);
+ 351              		.loc 1 210 3
+ 352 0248 3320     		movs	r0, #51
+ 353 024a FFF7FEFF 		bl	ili9341_WriteData
+ 211:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x42);
+ 354              		.loc 1 211 3
+ 355 024e 4220     		movs	r0, #66
+ 356 0250 FFF7FEFF 		bl	ili9341_WriteData
+ 212:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x05);
+ 357              		.loc 1 212 3
+ 358 0254 0520     		movs	r0, #5
+ 359 0256 FFF7FEFF 		bl	ili9341_WriteData
+ 213:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x0C);
+ 360              		.loc 1 213 3
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 11
+
+
+ 361 025a 0C20     		movs	r0, #12
+ 362 025c FFF7FEFF 		bl	ili9341_WriteData
+ 214:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x0A);
+ 363              		.loc 1 214 3
+ 364 0260 0A20     		movs	r0, #10
+ 365 0262 FFF7FEFF 		bl	ili9341_WriteData
+ 215:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x28);
+ 366              		.loc 1 215 3
+ 367 0266 2820     		movs	r0, #40
+ 368 0268 FFF7FEFF 		bl	ili9341_WriteData
+ 216:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x2F);
+ 369              		.loc 1 216 3
+ 370 026c 2F20     		movs	r0, #47
+ 371 026e FFF7FEFF 		bl	ili9341_WriteData
+ 217:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteData(0x0F);
+ 372              		.loc 1 217 3
+ 373 0272 0F20     		movs	r0, #15
+ 374 0274 FFF7FEFF 		bl	ili9341_WriteData
+ 218:Drivers/BSP/Components/ili9341/ili9341.c ****   
+ 219:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_SLEEP_OUT);
+ 375              		.loc 1 219 3
+ 376 0278 1120     		movs	r0, #17
+ 377 027a FFF7FEFF 		bl	ili9341_WriteReg
+ 220:Drivers/BSP/Components/ili9341/ili9341.c ****   LCD_Delay(200);
+ 378              		.loc 1 220 3
+ 379 027e C820     		movs	r0, #200
+ 380 0280 FFF7FEFF 		bl	LCD_Delay
+ 221:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_DISPLAY_ON);
+ 381              		.loc 1 221 3
+ 382 0284 2920     		movs	r0, #41
+ 383 0286 FFF7FEFF 		bl	ili9341_WriteReg
+ 222:Drivers/BSP/Components/ili9341/ili9341.c ****   /* GRAM start writing */
+ 223:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_GRAM);
+ 384              		.loc 1 223 3
+ 385 028a 2C20     		movs	r0, #44
+ 386 028c FFF7FEFF 		bl	ili9341_WriteReg
+ 224:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 387              		.loc 1 224 1
+ 388 0290 00BF     		nop
+ 389 0292 80BD     		pop	{r7, pc}
+ 390              		.cfi_endproc
+ 391              	.LFE0:
+ 393              		.section	.text.ili9341_ReadID,"ax",%progbits
+ 394              		.align	1
+ 395              		.global	ili9341_ReadID
+ 396              		.syntax unified
+ 397              		.thumb
+ 398              		.thumb_func
+ 400              	ili9341_ReadID:
+ 401              	.LFB1:
+ 225:Drivers/BSP/Components/ili9341/ili9341.c **** 
+ 226:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+ 227:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Disables the Display.
+ 228:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  None
+ 229:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval LCD Register Value.
+ 230:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 231:Drivers/BSP/Components/ili9341/ili9341.c **** uint16_t ili9341_ReadID(void)
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 12
+
+
+ 232:Drivers/BSP/Components/ili9341/ili9341.c **** {
+ 402              		.loc 1 232 1
+ 403              		.cfi_startproc
+ 404              		@ args = 0, pretend = 0, frame = 0
+ 405              		@ frame_needed = 1, uses_anonymous_args = 0
+ 406 0000 80B5     		push	{r7, lr}
+ 407              	.LCFI2:
+ 408              		.cfi_def_cfa_offset 8
+ 409              		.cfi_offset 7, -8
+ 410              		.cfi_offset 14, -4
+ 411 0002 00AF     		add	r7, sp, #0
+ 412              	.LCFI3:
+ 413              		.cfi_def_cfa_register 7
+ 233:Drivers/BSP/Components/ili9341/ili9341.c ****   LCD_IO_Init();
+ 414              		.loc 1 233 3
+ 415 0004 FFF7FEFF 		bl	LCD_IO_Init
+ 234:Drivers/BSP/Components/ili9341/ili9341.c ****   return ((uint16_t)ili9341_ReadData(LCD_READ_ID4, LCD_READ_ID4_SIZE));
+ 416              		.loc 1 234 21
+ 417 0008 0321     		movs	r1, #3
+ 418 000a D320     		movs	r0, #211
+ 419 000c FFF7FEFF 		bl	ili9341_ReadData
+ 420 0010 0346     		mov	r3, r0
+ 421              		.loc 1 234 11 discriminator 1
+ 422 0012 9BB2     		uxth	r3, r3
+ 235:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 423              		.loc 1 235 1
+ 424 0014 1846     		mov	r0, r3
+ 425 0016 80BD     		pop	{r7, pc}
+ 426              		.cfi_endproc
+ 427              	.LFE1:
+ 429              		.section	.text.ili9341_DisplayOn,"ax",%progbits
+ 430              		.align	1
+ 431              		.global	ili9341_DisplayOn
+ 432              		.syntax unified
+ 433              		.thumb
+ 434              		.thumb_func
+ 436              	ili9341_DisplayOn:
+ 437              	.LFB2:
+ 236:Drivers/BSP/Components/ili9341/ili9341.c **** 
+ 237:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+ 238:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Enables the Display.
+ 239:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  None
+ 240:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval None
+ 241:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 242:Drivers/BSP/Components/ili9341/ili9341.c **** void ili9341_DisplayOn(void)
+ 243:Drivers/BSP/Components/ili9341/ili9341.c **** {
+ 438              		.loc 1 243 1
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 0
+ 441              		@ frame_needed = 1, uses_anonymous_args = 0
+ 442 0000 80B5     		push	{r7, lr}
+ 443              	.LCFI4:
+ 444              		.cfi_def_cfa_offset 8
+ 445              		.cfi_offset 7, -8
+ 446              		.cfi_offset 14, -4
+ 447 0002 00AF     		add	r7, sp, #0
+ 448              	.LCFI5:
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 13
+
+
+ 449              		.cfi_def_cfa_register 7
+ 244:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Display On */
+ 245:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_DISPLAY_ON);
+ 450              		.loc 1 245 3
+ 451 0004 2920     		movs	r0, #41
+ 452 0006 FFF7FEFF 		bl	ili9341_WriteReg
+ 246:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 453              		.loc 1 246 1
+ 454 000a 00BF     		nop
+ 455 000c 80BD     		pop	{r7, pc}
+ 456              		.cfi_endproc
+ 457              	.LFE2:
+ 459              		.section	.text.ili9341_DisplayOff,"ax",%progbits
+ 460              		.align	1
+ 461              		.global	ili9341_DisplayOff
+ 462              		.syntax unified
+ 463              		.thumb
+ 464              		.thumb_func
+ 466              	ili9341_DisplayOff:
+ 467              	.LFB3:
+ 247:Drivers/BSP/Components/ili9341/ili9341.c **** 
+ 248:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+ 249:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Disables the Display.
+ 250:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  None
+ 251:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval None
+ 252:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 253:Drivers/BSP/Components/ili9341/ili9341.c **** void ili9341_DisplayOff(void)
+ 254:Drivers/BSP/Components/ili9341/ili9341.c **** {
+ 468              		.loc 1 254 1
+ 469              		.cfi_startproc
+ 470              		@ args = 0, pretend = 0, frame = 0
+ 471              		@ frame_needed = 1, uses_anonymous_args = 0
+ 472 0000 80B5     		push	{r7, lr}
+ 473              	.LCFI6:
+ 474              		.cfi_def_cfa_offset 8
+ 475              		.cfi_offset 7, -8
+ 476              		.cfi_offset 14, -4
+ 477 0002 00AF     		add	r7, sp, #0
+ 478              	.LCFI7:
+ 479              		.cfi_def_cfa_register 7
+ 255:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Display Off */
+ 256:Drivers/BSP/Components/ili9341/ili9341.c ****   ili9341_WriteReg(LCD_DISPLAY_OFF);
+ 480              		.loc 1 256 3
+ 481 0004 2820     		movs	r0, #40
+ 482 0006 FFF7FEFF 		bl	ili9341_WriteReg
+ 257:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 483              		.loc 1 257 1
+ 484 000a 00BF     		nop
+ 485 000c 80BD     		pop	{r7, pc}
+ 486              		.cfi_endproc
+ 487              	.LFE3:
+ 489              		.section	.text.ili9341_WriteReg,"ax",%progbits
+ 490              		.align	1
+ 491              		.global	ili9341_WriteReg
+ 492              		.syntax unified
+ 493              		.thumb
+ 494              		.thumb_func
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 14
+
+
+ 496              	ili9341_WriteReg:
+ 497              	.LFB4:
+ 258:Drivers/BSP/Components/ili9341/ili9341.c **** 
+ 259:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+ 260:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Writes  to the selected LCD register.
+ 261:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  LCD_Reg: address of the selected register.
+ 262:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval None
+ 263:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 264:Drivers/BSP/Components/ili9341/ili9341.c **** void ili9341_WriteReg(uint8_t LCD_Reg)
+ 265:Drivers/BSP/Components/ili9341/ili9341.c **** {
+ 498              		.loc 1 265 1
+ 499              		.cfi_startproc
+ 500              		@ args = 0, pretend = 0, frame = 8
+ 501              		@ frame_needed = 1, uses_anonymous_args = 0
+ 502 0000 80B5     		push	{r7, lr}
+ 503              	.LCFI8:
+ 504              		.cfi_def_cfa_offset 8
+ 505              		.cfi_offset 7, -8
+ 506              		.cfi_offset 14, -4
+ 507 0002 82B0     		sub	sp, sp, #8
+ 508              	.LCFI9:
+ 509              		.cfi_def_cfa_offset 16
+ 510 0004 00AF     		add	r7, sp, #0
+ 511              	.LCFI10:
+ 512              		.cfi_def_cfa_register 7
+ 513 0006 0346     		mov	r3, r0
+ 514 0008 FB71     		strb	r3, [r7, #7]
+ 266:Drivers/BSP/Components/ili9341/ili9341.c ****   LCD_IO_WriteReg(LCD_Reg);
+ 515              		.loc 1 266 3
+ 516 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 517 000c 1846     		mov	r0, r3
+ 518 000e FFF7FEFF 		bl	LCD_IO_WriteReg
+ 267:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 519              		.loc 1 267 1
+ 520 0012 00BF     		nop
+ 521 0014 0837     		adds	r7, r7, #8
+ 522              	.LCFI11:
+ 523              		.cfi_def_cfa_offset 8
+ 524 0016 BD46     		mov	sp, r7
+ 525              	.LCFI12:
+ 526              		.cfi_def_cfa_register 13
+ 527              		@ sp needed
+ 528 0018 80BD     		pop	{r7, pc}
+ 529              		.cfi_endproc
+ 530              	.LFE4:
+ 532              		.section	.text.ili9341_WriteData,"ax",%progbits
+ 533              		.align	1
+ 534              		.global	ili9341_WriteData
+ 535              		.syntax unified
+ 536              		.thumb
+ 537              		.thumb_func
+ 539              	ili9341_WriteData:
+ 540              	.LFB5:
+ 268:Drivers/BSP/Components/ili9341/ili9341.c **** 
+ 269:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+ 270:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Writes data to the selected LCD register.
+ 271:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  LCD_Reg: address of the selected register.
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 15
+
+
+ 272:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval None
+ 273:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 274:Drivers/BSP/Components/ili9341/ili9341.c **** void ili9341_WriteData(uint16_t RegValue)
+ 275:Drivers/BSP/Components/ili9341/ili9341.c **** {
+ 541              		.loc 1 275 1
+ 542              		.cfi_startproc
+ 543              		@ args = 0, pretend = 0, frame = 8
+ 544              		@ frame_needed = 1, uses_anonymous_args = 0
+ 545 0000 80B5     		push	{r7, lr}
+ 546              	.LCFI13:
+ 547              		.cfi_def_cfa_offset 8
+ 548              		.cfi_offset 7, -8
+ 549              		.cfi_offset 14, -4
+ 550 0002 82B0     		sub	sp, sp, #8
+ 551              	.LCFI14:
+ 552              		.cfi_def_cfa_offset 16
+ 553 0004 00AF     		add	r7, sp, #0
+ 554              	.LCFI15:
+ 555              		.cfi_def_cfa_register 7
+ 556 0006 0346     		mov	r3, r0
+ 557 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 276:Drivers/BSP/Components/ili9341/ili9341.c ****   LCD_IO_WriteData(RegValue);
+ 558              		.loc 1 276 3
+ 559 000a FB88     		ldrh	r3, [r7, #6]
+ 560 000c 1846     		mov	r0, r3
+ 561 000e FFF7FEFF 		bl	LCD_IO_WriteData
+ 277:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 562              		.loc 1 277 1
+ 563 0012 00BF     		nop
+ 564 0014 0837     		adds	r7, r7, #8
+ 565              	.LCFI16:
+ 566              		.cfi_def_cfa_offset 8
+ 567 0016 BD46     		mov	sp, r7
+ 568              	.LCFI17:
+ 569              		.cfi_def_cfa_register 13
+ 570              		@ sp needed
+ 571 0018 80BD     		pop	{r7, pc}
+ 572              		.cfi_endproc
+ 573              	.LFE5:
+ 575              		.section	.text.ili9341_ReadData,"ax",%progbits
+ 576              		.align	1
+ 577              		.global	ili9341_ReadData
+ 578              		.syntax unified
+ 579              		.thumb
+ 580              		.thumb_func
+ 582              	ili9341_ReadData:
+ 583              	.LFB6:
+ 278:Drivers/BSP/Components/ili9341/ili9341.c **** 
+ 279:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+ 280:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Reads the selected LCD Register.
+ 281:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  RegValue: Address of the register to read
+ 282:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  ReadSize: Number of bytes to read
+ 283:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval LCD Register Value.
+ 284:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 285:Drivers/BSP/Components/ili9341/ili9341.c **** uint32_t ili9341_ReadData(uint16_t RegValue, uint8_t ReadSize)
+ 286:Drivers/BSP/Components/ili9341/ili9341.c **** {
+ 584              		.loc 1 286 1
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 16
+
+
+ 585              		.cfi_startproc
+ 586              		@ args = 0, pretend = 0, frame = 8
+ 587              		@ frame_needed = 1, uses_anonymous_args = 0
+ 588 0000 80B5     		push	{r7, lr}
+ 589              	.LCFI18:
+ 590              		.cfi_def_cfa_offset 8
+ 591              		.cfi_offset 7, -8
+ 592              		.cfi_offset 14, -4
+ 593 0002 82B0     		sub	sp, sp, #8
+ 594              	.LCFI19:
+ 595              		.cfi_def_cfa_offset 16
+ 596 0004 00AF     		add	r7, sp, #0
+ 597              	.LCFI20:
+ 598              		.cfi_def_cfa_register 7
+ 599 0006 0346     		mov	r3, r0
+ 600 0008 0A46     		mov	r2, r1
+ 601 000a FB80     		strh	r3, [r7, #6]	@ movhi
+ 602 000c 1346     		mov	r3, r2
+ 603 000e 7B71     		strb	r3, [r7, #5]
+ 287:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Read a max of 4 bytes */
+ 288:Drivers/BSP/Components/ili9341/ili9341.c ****   return (LCD_IO_ReadData(RegValue, ReadSize));
+ 604              		.loc 1 288 11
+ 605 0010 7A79     		ldrb	r2, [r7, #5]	@ zero_extendqisi2
+ 606 0012 FB88     		ldrh	r3, [r7, #6]
+ 607 0014 1146     		mov	r1, r2
+ 608 0016 1846     		mov	r0, r3
+ 609 0018 FFF7FEFF 		bl	LCD_IO_ReadData
+ 610 001c 0346     		mov	r3, r0
+ 289:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 611              		.loc 1 289 1
+ 612 001e 1846     		mov	r0, r3
+ 613 0020 0837     		adds	r7, r7, #8
+ 614              	.LCFI21:
+ 615              		.cfi_def_cfa_offset 8
+ 616 0022 BD46     		mov	sp, r7
+ 617              	.LCFI22:
+ 618              		.cfi_def_cfa_register 13
+ 619              		@ sp needed
+ 620 0024 80BD     		pop	{r7, pc}
+ 621              		.cfi_endproc
+ 622              	.LFE6:
+ 624              		.section	.text.ili9341_GetLcdPixelWidth,"ax",%progbits
+ 625              		.align	1
+ 626              		.global	ili9341_GetLcdPixelWidth
+ 627              		.syntax unified
+ 628              		.thumb
+ 629              		.thumb_func
+ 631              	ili9341_GetLcdPixelWidth:
+ 632              	.LFB7:
+ 290:Drivers/BSP/Components/ili9341/ili9341.c **** 
+ 291:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+ 292:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Get LCD PIXEL WIDTH.
+ 293:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  None
+ 294:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval LCD PIXEL WIDTH.
+ 295:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 296:Drivers/BSP/Components/ili9341/ili9341.c **** uint16_t ili9341_GetLcdPixelWidth(void)
+ 297:Drivers/BSP/Components/ili9341/ili9341.c **** {
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 17
+
+
+ 633              		.loc 1 297 1
+ 634              		.cfi_startproc
+ 635              		@ args = 0, pretend = 0, frame = 0
+ 636              		@ frame_needed = 1, uses_anonymous_args = 0
+ 637              		@ link register save eliminated.
+ 638 0000 80B4     		push	{r7}
+ 639              	.LCFI23:
+ 640              		.cfi_def_cfa_offset 4
+ 641              		.cfi_offset 7, -4
+ 642 0002 00AF     		add	r7, sp, #0
+ 643              	.LCFI24:
+ 644              		.cfi_def_cfa_register 7
+ 298:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Return LCD PIXEL WIDTH */
+ 299:Drivers/BSP/Components/ili9341/ili9341.c ****   return ILI9341_LCD_PIXEL_WIDTH;
+ 645              		.loc 1 299 10
+ 646 0004 F023     		movs	r3, #240
+ 300:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 647              		.loc 1 300 1
+ 648 0006 1846     		mov	r0, r3
+ 649 0008 BD46     		mov	sp, r7
+ 650              	.LCFI25:
+ 651              		.cfi_def_cfa_register 13
+ 652              		@ sp needed
+ 653 000a 5DF8047B 		ldr	r7, [sp], #4
+ 654              	.LCFI26:
+ 655              		.cfi_restore 7
+ 656              		.cfi_def_cfa_offset 0
+ 657 000e 7047     		bx	lr
+ 658              		.cfi_endproc
+ 659              	.LFE7:
+ 661              		.section	.text.ili9341_GetLcdPixelHeight,"ax",%progbits
+ 662              		.align	1
+ 663              		.global	ili9341_GetLcdPixelHeight
+ 664              		.syntax unified
+ 665              		.thumb
+ 666              		.thumb_func
+ 668              	ili9341_GetLcdPixelHeight:
+ 669              	.LFB8:
+ 301:Drivers/BSP/Components/ili9341/ili9341.c **** 
+ 302:Drivers/BSP/Components/ili9341/ili9341.c **** /**
+ 303:Drivers/BSP/Components/ili9341/ili9341.c ****   * @brief  Get LCD PIXEL HEIGHT.
+ 304:Drivers/BSP/Components/ili9341/ili9341.c ****   * @param  None
+ 305:Drivers/BSP/Components/ili9341/ili9341.c ****   * @retval LCD PIXEL HEIGHT.
+ 306:Drivers/BSP/Components/ili9341/ili9341.c ****   */
+ 307:Drivers/BSP/Components/ili9341/ili9341.c **** uint16_t ili9341_GetLcdPixelHeight(void)
+ 308:Drivers/BSP/Components/ili9341/ili9341.c **** {
+ 670              		.loc 1 308 1
+ 671              		.cfi_startproc
+ 672              		@ args = 0, pretend = 0, frame = 0
+ 673              		@ frame_needed = 1, uses_anonymous_args = 0
+ 674              		@ link register save eliminated.
+ 675 0000 80B4     		push	{r7}
+ 676              	.LCFI27:
+ 677              		.cfi_def_cfa_offset 4
+ 678              		.cfi_offset 7, -4
+ 679 0002 00AF     		add	r7, sp, #0
+ 680              	.LCFI28:
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 18
+
+
+ 681              		.cfi_def_cfa_register 7
+ 309:Drivers/BSP/Components/ili9341/ili9341.c ****   /* Return LCD PIXEL HEIGHT */
+ 310:Drivers/BSP/Components/ili9341/ili9341.c ****   return ILI9341_LCD_PIXEL_HEIGHT;
+ 682              		.loc 1 310 10
+ 683 0004 4FF4A073 		mov	r3, #320
+ 311:Drivers/BSP/Components/ili9341/ili9341.c **** }
+ 684              		.loc 1 311 1
+ 685 0008 1846     		mov	r0, r3
+ 686 000a BD46     		mov	sp, r7
+ 687              	.LCFI29:
+ 688              		.cfi_def_cfa_register 13
+ 689              		@ sp needed
+ 690 000c 5DF8047B 		ldr	r7, [sp], #4
+ 691              	.LCFI30:
+ 692              		.cfi_restore 7
+ 693              		.cfi_def_cfa_offset 0
+ 694 0010 7047     		bx	lr
+ 695              		.cfi_endproc
+ 696              	.LFE8:
+ 698              		.text
+ 699              	.Letext0:
+ 700              		.file 2 "/Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/arm-none-eabi/include/machine/_defa
+ 701              		.file 3 "/Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/arm-none-eabi/include/sys/_stdint.h
+ 702              		.file 4 "Drivers/BSP/Components/ili9341/../Common/lcd.h"
+ 703              		.file 5 "Drivers/BSP/Components/ili9341/ili9341.h"
+ARM GAS  /var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 ili9341.c
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:25     .data.ili9341_drv:00000000 ili9341_drv
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:22     .data.ili9341_drv:00000000 $d
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:47     .text.ili9341_Init:00000000 ili9341_Init
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:400    .text.ili9341_ReadID:00000000 ili9341_ReadID
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:436    .text.ili9341_DisplayOn:00000000 ili9341_DisplayOn
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:466    .text.ili9341_DisplayOff:00000000 ili9341_DisplayOff
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:631    .text.ili9341_GetLcdPixelWidth:00000000 ili9341_GetLcdPixelWidth
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:668    .text.ili9341_GetLcdPixelHeight:00000000 ili9341_GetLcdPixelHeight
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:41     .text.ili9341_Init:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:496    .text.ili9341_WriteReg:00000000 ili9341_WriteReg
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:539    .text.ili9341_WriteData:00000000 ili9341_WriteData
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:394    .text.ili9341_ReadID:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:582    .text.ili9341_ReadData:00000000 ili9341_ReadData
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:430    .text.ili9341_DisplayOn:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:460    .text.ili9341_DisplayOff:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:490    .text.ili9341_WriteReg:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:533    .text.ili9341_WriteData:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:576    .text.ili9341_ReadData:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:625    .text.ili9341_GetLcdPixelWidth:00000000 $t
+/var/folders/06/9k7gq4t13mj84z2yhw3grvhc0000gn/T//ccTwjU4r.s:662    .text.ili9341_GetLcdPixelHeight:00000000 $t
+
+UNDEFINED SYMBOLS
+LCD_IO_Init
+LCD_Delay
+LCD_IO_WriteReg
+LCD_IO_WriteData
+LCD_IO_ReadData

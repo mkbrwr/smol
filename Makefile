@@ -68,6 +68,8 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dsi.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
+Game/Src/screen.c \
+Game/Src/PixelData.c \
 
 C_INCLUDES =  \
 -Ibuild \
@@ -82,6 +84,7 @@ C_INCLUDES =  \
 -IDrivers/BSP/Components/i3g4250d/ \
 -IDrivers/BSP/Components/l3gd20/ \
 -IDrivers/BSP/Components/stmpe811/ \
+-IGame/Inc/ \
 
 
 AS_SOURCES =  \

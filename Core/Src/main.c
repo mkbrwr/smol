@@ -68,6 +68,8 @@ static void game_engine_init(void);
 static void logEngineTickTime(uint16_t *engineTickTime);
 
 extern int $$s5hello7StrooctV9myFooFuncSiyF();
+extern int $$s5hello7StrooctV9myBarFuncSiyF();
+extern void $$s5hello7StrooctV9myBazFuncyyF();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -120,7 +122,7 @@ int main(void)
 
   // HAL_UART_Receive_IT(&huart5, rx_buffer, RX_BUFFER_SIZE);
 
-  // lcd_init();
+  lcd_init();
   // game_engine_init();
   // #if LOG_TO_OLED
     // oled_init();
@@ -132,14 +134,24 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   // uint32_t engineTickTime = -1;
+  //
+  $$s5hello7StrooctV9myFooFuncSiyF();
 
   while (1) {
     /* USER CODE END WHILE */
 
-    HAL_Delay($$s5hello7StrooctV9myFooFuncSiyF());
-    BSP_LED_Toggle(LED3);
+    // $$s5hello7StrooctV9myFooFuncSiyF();
+    // ScreenColor sc = { 0xff, 0xff, 0x00, 0xff };
+    // screen_clear(sc);
+    // screen_flush();
+    //
     BSP_LED_Toggle(LED4);
-    HAL_Delay($$s5hello7StrooctV9myFooFuncSiyF());
+    // ScreenColor sc2 = { 0xff, 0x00, 0xff, 0x00 };
+    // screen_clear(sc2);
+    // screen_flush();
+    $$s5hello7StrooctV9myBazFuncyyF();
+
+    HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
     // engineTickTime = HAL_GetTick();
     // GNJIN_Tick();
