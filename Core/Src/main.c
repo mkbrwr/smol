@@ -60,16 +60,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 static void rtt_printf_test(void);
 static void lcd_init(void);
-static void game_engine_init(void);
-// #if LOG_TO_OLED
-// void oled_init(void);
-// #endif
 
-static void logEngineTickTime(uint16_t *engineTickTime);
-
-extern int $$s5hello7StrooctV9myFooFuncSiyF();
-extern int $$s5hello7StrooctV9myBarFuncSiyF();
-extern void $$s5hello7StrooctV9myBazFuncyyF();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -114,52 +105,22 @@ int main(void)
   MX_DMA2D_Init();
   MX_FMC_Init();
   MX_LTDC_Init();
-  /* USER CODE BEGIN 2 */
-  // SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP);
 
   BSP_LED_Init(LED3);
   BSP_LED_Init(LED4);
 
+  // TODO: implement user input using interrupts
   // HAL_UART_Receive_IT(&huart5, rx_buffer, RX_BUFFER_SIZE);
 
   lcd_init();
-  // game_engine_init();
-  // #if LOG_TO_OLED
-    // oled_init();
-  // #endif
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-
-  // uint32_t engineTickTime = -1;
-  //
-  $$s5hello7StrooctV9myFooFuncSiyF();
+  $$s5swift16startSwiftEngineyyF(); // startSwiftEngine()
 
   while (1) {
-    /* USER CODE END WHILE */
-
-    // $$s5hello7StrooctV9myFooFuncSiyF();
-    // ScreenColor sc = { 0xff, 0xff, 0x00, 0xff };
-    // screen_clear(sc);
-    // screen_flush();
-    //
-    BSP_LED_Toggle(LED4);
-    // ScreenColor sc2 = { 0xff, 0x00, 0xff, 0x00 };
-    // screen_clear(sc2);
-    // screen_flush();
-    $$s5hello7StrooctV9myBazFuncyyF();
-
     HAL_Delay(1000);
-    /* USER CODE BEGIN 3 */
-    // engineTickTime = HAL_GetTick();
-    // GNJIN_Tick();
-    // engineTickTime = HAL_GetTick() - engineTickTime;
-    // uint16_t tickTimeMilliseconds = (uint16_t)engineTickTime;
-    // logEngineTickTime(&tickTimeMilliseconds);
-
-    // rtt_printf_test();
+    BSP_LED_Toggle(LED4);
+    HAL_Delay(1000);
+    /* USER CODE END WHILE */
   }
   /* USER CODE END 3 */
 }
@@ -225,7 +186,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
   for (int i = 0; i < RX_BUFFER_SIZE; i += 1) {
     SEGGER_RTT_printf(0, "rx_buffer[%d]: %c\r\n", i, rx_buffer[i]);
   }
-  // GNJIN_HandleInput(rx_buffer, RX_BUFFER_SIZE);
+  // $$s5swift11handleInput5inputySayAA0C0OG_tF(0, 1, 2, 3, 4, 5); // public func handleInput(input: [Input])
   HAL_UART_Receive_IT(huart, rx_buffer, RX_BUFFER_SIZE);
 }
 

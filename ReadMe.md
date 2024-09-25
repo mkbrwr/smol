@@ -1,5 +1,5 @@
 # Compile swift sources
-export TOOLCHAINS='org.swift.59202408051a' \
+export TOOLCHAINS='org.swift.59202408051a'
 make all
 
 # Generate swift module .h file

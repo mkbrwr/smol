@@ -20,6 +20,7 @@ GCC_PATH = /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin
 ######################################
 # C sources
 C_SOURCES =  \
+Support.c \
 Core/Src/fmc.c \
 Core/Src/spi.c \
 Core/Src/gpio.c \
@@ -88,10 +89,11 @@ C_INCLUDES =  \
 
 
 AS_SOURCES =  \
-startup_stm32f429xx.s
+startup_stm32f429xx.s \
 
 SWIFT_SOURCES =  \
-hello.swift
+hello.swift \
+engine.swift \
 
 #######################################
 # binaries
@@ -166,8 +168,7 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(AS_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(AS_SOURCES)))
 
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(SWIFT_SOURCES:.swift=.o)))
-vpath %.swift $(sort $(dir $(SWIFT_SOURCES)))
+OBJECTS += build/swift.o
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
@@ -175,11 +176,11 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.s=.lst)) $< -o $@
 
-$(BUILD_DIR)/%.o: %.swift Makefile | $(BUILD_DIR)
-	swiftc -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -no-allocations -parse-as-library \
+$(BUILD_DIR)/swift.o: engine.swift hello.swift Makefile | $(BUILD_DIR)
+	swiftc -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
 	-import-bridging-header Bridging-Header.h \
 	-Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=hard \
-    -c hello.swift -o build/hello.o
+    -c hello.swift engine.swift -o build/swift.o
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
