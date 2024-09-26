@@ -5,8 +5,6 @@
 
 static uint32_t colorBuffer[SCREEN_WIDHT][SCREEN_HEIGHT] __attribute__((section(".sdram")));
 
-// X starts at lower left corner and goes left
-// Y starts at lower left cornect and goes up
 void screen_write_pixel(uint32_t Xpos, uint32_t Ypos, uint32_t color)
 {
   colorBuffer[Ypos][Xpos] = color;

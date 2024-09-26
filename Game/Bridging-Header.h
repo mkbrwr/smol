@@ -19,4 +19,7 @@ void screen_clear(uint32_t argb);
 void screen_write_pixel(uint32_t Xpos, uint32_t Ypos, uint32_t argb);
 void screen_flush(void);
 
+// Swift Logo
+uint32_t getSwiftLogoPixelDataAt(uint32_t w, uint32_t h);
+
 #endif

@@ -40,26 +40,15 @@ final class SwiftRenderer {
         self.screenWidth = screenWidth
         self.screenHeight = screenHeight
     }
-    private var testVar = 0
+
     func render(_ frame: Frame) {
-        let pixel: Pixel
-        switch testVar {
-        case 0:
-            pixel = Pixel(red: 0xff, green: 0x00, blue: 0x00)
-        case 1:
-            pixel = Pixel(red: 0x00, green: 0xff, blue: 0x00)
-        case 2:
-            pixel = Pixel(red: 0x00, green: 0x00, blue: 0xff)
-        default:
-            fatalError()
-        }
-        testVar = (testVar + 1) % 3
         for x in 0..<screenWidth {
             for y in 0..<screenHeight {
+                let pixel = getSwiftLogoPixelDataAt(UInt32(y % 50), UInt32(x % 50))
                 screen_write_pixel(
                     UInt32(x),
                     UInt32(y),
-                    pixel.uint32
+                    pixel
                 )
             }
         }
