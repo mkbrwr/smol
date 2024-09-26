@@ -58,8 +58,10 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-static void rtt_printf_test(void);
+[[maybe_unused]] static void rtt_printf_test(void);
 static void lcd_init(void);
+
+extern void $$s6engine16startSwiftEngineyyF(); // startSwiftEngine() mangled name from .map file
 
 /* USER CODE END PFP */
 
@@ -113,12 +115,14 @@ int main(void)
   // HAL_UART_Receive_IT(&huart5, rx_buffer, RX_BUFFER_SIZE);
 
   lcd_init();
+  // SEGGER_RTT_Init();
 
-  $$s5swift16startSwiftEngineyyF(); // startSwiftEngine()
+  $$s6engine16startSwiftEngineyyF (); // startSwiftEngine()
 
   while (1) {
     HAL_Delay(1000);
     BSP_LED_Toggle(LED4);
+    // rtt_printf_test();
     HAL_Delay(1000);
     /* USER CODE END WHILE */
   }
@@ -191,7 +195,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 }
 
 /* RTT */
-
 void rtt_printf_test(void) {
   SEGGER_RTT_WriteString(0, "SEGGER Real-Time-Terminal Sample\r\n\r\n");
   SEGGER_RTT_WriteString(0, "###### Testing SEGGER_printf() ######\r\n");
@@ -342,7 +345,9 @@ void oled_init(void) {
 }
 #endif
 
-void game_engine_init(void) { GNJIN_Init(); }
+void game_engine_init(void) {
+    // TODO: move engine start here
+}
 
 void logEngineTickTime(uint16_t *engineTickTime)
 {

@@ -1,24 +1,15 @@
+#include <stdint.h>
 #include "screen.h"
 #include "dma2d.h"
 #include "stm32f4xx_hal.h"
-#include <stdint.h>
 
-#define DEPTH_BUFFER_ZERO 0.0f;
+static uint32_t colorBuffer[SCREEN_WIDHT][SCREEN_HEIGHT] __attribute__((section(".sdram")));
 
-static float depthBuffer[SCREEN_WIDHT][SCREEN_HEIGHT] __attribute__((section(".sdram")));
-static ScreenColor colorBuffer[SCREEN_WIDHT][SCREEN_HEIGHT] __attribute__((section(".sdram")));
-
-void screen_write_pixel(unsigned int Xpos, unsigned int Ypos, ScreenColor color, float in_pixel_depth)
+// X starts at lower left corner and goes left
+// Y starts at lower left cornect and goes up
+void screen_write_pixel(uint32_t Xpos, uint32_t Ypos, uint32_t color)
 {
-  float current_pixel_depth = depthBuffer[Ypos][Xpos];
-  if (current_pixel_depth == 0.0f) {
-    colorBuffer[Ypos][Xpos] = color;
-    depthBuffer[Ypos][Xpos] = in_pixel_depth;
-  }
-  else if (current_pixel_depth > in_pixel_depth) {
-    colorBuffer[Ypos][Xpos] = color;
-    depthBuffer[Ypos][Xpos] = in_pixel_depth;
-  }
+  colorBuffer[Ypos][Xpos] = color;
 }
 
 void screen_flush(void)
@@ -37,14 +28,13 @@ void screen_flush(void)
 
   unsigned int address = getLtdcHandler().LayerCfg[getActiveLayer()].FBStartAdress;
 
-  HAL_DMA2D_Start_IT(&hdma2d, (uint32_t)colorBuffer, (unsigned int)address, 240, 320);
+  HAL_DMA2D_Start_IT(&hdma2d, (uint32_t)&colorBuffer[0], (unsigned int)address, 240, 320);
 }
 
-void screen_clear(ScreenColor color)
+void screen_clear(uint32_t color)
 {
   for (int i = 0; i < SCREEN_WIDHT; i += 1) {
     for (int j = 0; j < SCREEN_HEIGHT; j += 1) {
-      depthBuffer[i][j] = DEPTH_BUFFER_ZERO;
       colorBuffer[i][j] = color;
     }
   }
