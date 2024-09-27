@@ -5,7 +5,7 @@ Drivers from STM example project, which are written in C, and Swift for applicat
 ![IMG_4343](https://github.com/user-attachments/assets/eab49c33-80f5-428e-be07-85be8f667c85)
 
 # Build
-export TOOLCHAINS='org.swift.59202408051a'
+export TOOLCHAINS='org.swift.61202409251a'
 make
 
 # Install command

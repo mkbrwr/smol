@@ -7,7 +7,7 @@ static uint32_t colorBuffer[SCREEN_WIDHT][SCREEN_HEIGHT] __attribute__((section(
 
 void screen_write_pixel(uint32_t Xpos, uint32_t Ypos, uint32_t color)
 {
-  colorBuffer[Ypos][Xpos] = color;
+  colorBuffer[Ypos][SCREEN_HEIGHT - Xpos] = color;
 }
 
 void screen_flush(void)
