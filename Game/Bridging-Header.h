@@ -5,8 +5,8 @@
 // Debug
 typedef enum
 {
-  LED3 = 0,
-  LED4 = 1
+  GREEN_LED = 0,
+  RED_LED = 1
 } Led_TypeDef;
 
 void HAL_Delay(uint32_t Delay);

@@ -20,7 +20,6 @@ GCC_PATH = /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin
 ######################################
 # C sources
 C_SOURCES =  \
-Support.c \
 Core/Src/fmc.c \
 Core/Src/spi.c \
 Core/Src/gpio.c \
@@ -131,7 +130,7 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -fno-stack-protector
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -175,11 +174,11 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.s=.lst)) $< -o $@
 
-$(BUILD_DIR)/engine.o: Game/engine.swift Makefile | $(BUILD_DIR)
-	swiftc -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
+$(BUILD_DIR)/engine.o: Game/engine.swift SingleCoreAllocator.swift Makefile | $(BUILD_DIR)
+	swiftc -Xfrontend -disable-stack-protector -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
 	-import-bridging-header Game/Bridging-Header.h \
-	-Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=hard \
-    -c Game/engine.swift -o build/engine.o
+	-Xcc -fno-stack-protector -Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=hard \
+    -c Game/engine.swift SingleCoreAllocator.swift -o build/engine.o
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@

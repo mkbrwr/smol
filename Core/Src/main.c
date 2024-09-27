@@ -121,7 +121,7 @@ int main(void)
 
   while (1) {
     HAL_Delay(1000);
-    BSP_LED_Toggle(LED4);
+    BSP_LED_Toggle(LED3);
     // rtt_printf_test();
     HAL_Delay(1000);
     /* USER CODE END WHILE */

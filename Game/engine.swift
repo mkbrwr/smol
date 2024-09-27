@@ -10,7 +10,7 @@ public func startSwiftEngine() {
 
 typealias ColorComponent = UInt8
 
-struct Pixel {
+class Pixel {
     let red: ColorComponent
     let green: ColorComponent
     let blue: ColorComponent
@@ -22,13 +22,11 @@ struct Pixel {
         uint32 |= UInt32(blue)
         return uint32
     }
-}
 
-struct Frame {
-    let pixels: [Pixel]
-
-    init(pixels: [Pixel]) {
-        self.pixels = pixels
+    init(argb: UInt32) {
+        red = UInt8(truncatingIfNeeded: (argb & 0x00_ff0000) >> 16)
+        green = UInt8(truncatingIfNeeded: (argb & 0x00_00ff00) >> 8)
+        blue = UInt8(truncatingIfNeeded: (argb & 0x00_0000ff))
     }
 }
 
