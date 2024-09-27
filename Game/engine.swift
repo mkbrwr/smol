@@ -31,22 +31,29 @@ struct Pixel {
 }
 
 struct Point {
-    let x: Int
-    let y: Int
+    var x: Int
+    var y: Int
+
+    mutating func offset(by: Point) -> Point {
+        x += by.x
+        y += by.y
+        return self
+    }
 }
 
 protocol Sprite {
     var width: Int { get }
     var height: Int { get }
-    var pixels: [Pixel] { get set }
+    subscript(index: Int) -> Pixel? { get }
 }
 
 class SwiftLogo: Sprite {
-    let width = 120
+    let width = 50
     let height = 50
-    var pixels: [Pixel]
-    init() {
-        pixels = [Pixel].init(repeating: Pixel(argb: 0xffff_0000), count: width * height)
+
+    subscript(index: Int) -> Pixel? {
+        guard index < width * height else { return nil }
+        return Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index)))
     }
 }
 
@@ -55,23 +62,36 @@ class SwiftLogo: Sprite {
 final class Screen {
     let width: Int
     let height: Int
+    private var backgroundColor: Pixel = Pixel(argb: 0xffff_ffff)
 
     init(width: Int, height: Int) {
         self.width = width
         self.height = height
     }
 
-    func draw(_ pixel: Pixel, at: Point) {
-        screen_write_pixel(UInt32(at.x), UInt32(at.y), pixel.argb)
-        screen_flush()
+    convenience init(width: Int, height: Int, backgroundColor: Pixel) {
+        self.init(width: width, height: height)
+        self.backgroundColor = backgroundColor
+        fill(repeating: backgroundColor)
     }
 
-    func fillScreen(repeating pixel: Pixel) {
+    func clear() {
+        fill(repeating: backgroundColor)
+    }
+
+    func draw(_ pixel: Pixel, at: Point) {
+        screen_write_pixel(UInt32(at.x), UInt32(at.y), pixel.argb)
+    }
+
+    func fill(repeating pixel: Pixel) {
         for x in 0..<width {
             for y in 0..<height {
                 screen_write_pixel(UInt32(x), UInt32(y), pixel.argb)
             }
         }
+    }
+
+    func flush() {
         screen_flush()
     }
 }
@@ -84,30 +104,45 @@ final class SwiftRenderer {
     }
 
     func renderTestFrame() {
-        screen.fillScreen(repeating: Pixel(argb: 0xffff_00ff))
+        screen.fill(repeating: Pixel(argb: 0xffff_00ff))
     }
 
     func render(_ sprite: some Sprite, at origin: Point) {
-        for x in 0..<sprite.width {
-            for y in 0..<sprite.height {
-                let idx = y + x * sprite.height
-                screen.draw(sprite.pixels[idx], at: Point(x: origin.x + x, y: origin.y + y))
+        screen.clear()
+        for y in 0..<sprite.height {
+            for x in 0..<sprite.width {
+                let idx = y + x * sprite.width
+                if let pixel = sprite[idx] {
+                    screen.draw(pixel, at: Point(x: origin.x + x, y: origin.y + y))
+                }
             }
         }
+        screen.flush()
     }
 }
 
 final class SwiftEngine {
-    private let renderer = SwiftRenderer(screen: Screen(width: 240, height: 320))
+    private let renderer = SwiftRenderer(
+        screen: Screen(width: 240, height: 320, backgroundColor: Pixel(argb: 0xff00_0000)))
 
-    init() {}
+    let swiftLogo = SwiftLogo()
+    var logoOrigin = Point(x: 10, y: 40)
+    var logoSpeedX = 0
+    var logoSpeedY = 0
 
     func onCreate() {
+        logoSpeedX = 2
+        logoSpeedY = 2
     }
 
     func onUpdate() {
-        let swiftLogo = SwiftLogo()
-        renderer.render(swiftLogo, at: Point(x: 10, y: 40))
+        if logoOrigin.x + swiftLogo.width >= 240 || logoOrigin.x <= 0 {
+            logoSpeedX = -logoSpeedX
+        }
+        if logoOrigin.y + swiftLogo.height >= 320 || logoOrigin.y <= 0 {
+            logoSpeedY = -logoSpeedY
+        }
+        renderer.render(swiftLogo, at: logoOrigin.offset(by: Point(x: logoSpeedX, y: logoSpeedY)))
         Led.green.toggle()
     }
 

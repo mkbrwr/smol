@@ -436,6 +436,6 @@ const uint32_t logoPixelData[LOGO_LAYER_WIDTH * LOGO_LAYER_HEIGHT] = {
 
 const uint32_t *logoPixelDataStartPointer = &logoPixelData[0];
 
-uint32_t getSwiftLogoPixelDataAt(uint32_t w, uint32_t h) {
-    return (uint32_t)*(logoPixelDataStartPointer+(w*50)+h);
+uint32_t getSwiftLogoPixelDataAt(uint32_t idx) {
+    return logoPixelDataStartPointer[idx];
 }
