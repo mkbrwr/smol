@@ -11,7 +11,7 @@ public func posix_memalign(
     size = size - (size % 16)
     let result = memoryArea + offset
     offset += size
-    if offset >= 50000000 {
+    if offset >= 1000_000 {
         fatalError()
     }
     ptr.pointee = result

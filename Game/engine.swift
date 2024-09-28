@@ -56,17 +56,9 @@ class SwiftLogo: Sprite {
     let width = 50
     let height = 50
 
-    var pixels: [Pixel] = []
-
-    init() {
-        for index in 0..<width * height {
-            pixels.append(Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index))))
-        }
-    }
-
     subscript(index: Int) -> Pixel? {
         guard index < width * height else { return nil }
-        return pixels[index]
+        return Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index)))
     }
 }
 
