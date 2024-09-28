@@ -10,7 +10,7 @@ public func startSwiftEngine() {
 
 typealias ColorComponent = UInt8
 
-struct Pixel {
+class Pixel {
     let red: ColorComponent
     let green: ColorComponent
     let blue: ColorComponent
@@ -30,11 +30,16 @@ struct Pixel {
     }
 }
 
-struct Point {
+class Point {
     var x: Int
     var y: Int
 
-    mutating func offset(by: Point) -> Point {
+    init(x: Int, y: Int) {
+        self.x = x
+        self.y = y
+    }
+
+    func offset(by: Point) -> Point {
         x += by.x
         y += by.y
         return self
@@ -51,9 +56,17 @@ class SwiftLogo: Sprite {
     let width = 50
     let height = 50
 
+    var pixels: [Pixel] = []
+
+    init() {
+        for index in 0..<width * height {
+            pixels.append(Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index))))
+        }
+    }
+
     subscript(index: Int) -> Pixel? {
         guard index < width * height else { return nil }
-        return Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index)))
+        return pixels[index]
     }
 }
 

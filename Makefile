@@ -174,11 +174,11 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.s=.lst)) $< -o $@
 
-$(BUILD_DIR)/engine.o: Game/engine.swift SingleCoreAllocator.swift Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/engine.o: Game/engine.swift test_alloc.swift Makefile | $(BUILD_DIR)
 	swiftc -Xfrontend -disable-stack-protector -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
 	-import-bridging-header Game/Bridging-Header.h \
 	-Xcc -fno-stack-protector -Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=hard \
-    -c Game/engine.swift SingleCoreAllocator.swift -o build/engine.o
+    -c Game/engine.swift test_alloc.swift -o build/engine.o
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
