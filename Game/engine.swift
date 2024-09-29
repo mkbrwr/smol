@@ -10,7 +10,7 @@ public func startSwiftEngine() {
 
 typealias ColorComponent = UInt8
 
-class Pixel {
+struct Pixel {
     let red: ColorComponent
     let green: ColorComponent
     let blue: ColorComponent
@@ -29,13 +29,9 @@ class Pixel {
         green = UInt8(truncatingIfNeeded: (argb & 0x00_00ff00) >> 8)
         blue = UInt8(truncatingIfNeeded: (argb & 0x00_0000ff))
     }
-
-    deinit {
-        //SEGGER_RTT_WriteString(0, "Pixel deinit")
-    }
 }
 
-class Point {
+struct Point {
     var x: Int
     var y: Int
 
@@ -44,7 +40,7 @@ class Point {
         self.y = y
     }
 
-    func offset(by: Point) -> Point {
+    mutating func offset(by: Point) -> Point {
         x += by.x
         y += by.y
         return self
@@ -57,24 +53,22 @@ protocol Sprite {
     subscript(index: Int) -> Pixel? { get }
 }
 
-class SwiftLogo: Sprite {
+struct SwiftLogo: Sprite {
     let width = 50
     let height = 50
 
-    var pixels: [Pixel] = []
+    private(set) var pixels: [Pixel] = []
 
-    //init() {
-    //        //for _ in 0 ..< 1000 {
-    //            pixels = []
-    //            for index in 0..<width * height {
-    //                pixels.append()
-    //            }
-    //        //}
-    //    }
+    init() {
+        pixels = []
+        for index in 0..<width * height {
+            pixels.append(Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index))))
+        }
+    }
 
     subscript(index: Int) -> Pixel? {
         guard index < width * height else { return nil }
-        return Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index)))
+        return pixels[index]
     }
 }
 

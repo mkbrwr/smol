@@ -14,11 +14,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define HEAP_SIZE (128 * 1024)
+#define HEAP_SIZE (2 * 1024 * 1024)
 
-__attribute__((aligned(4)))
-__attribute__((section(".data")))
-char heap[HEAP_SIZE] = {};
+char* heap = (char*)0xD02AB000;
 size_t next_heap_index = 0;
 
 void *calloc(size_t count, size_t size) {
@@ -41,10 +39,6 @@ void free(void *ptr) {
       BSP_LED_Toggle(1);
       HAL_Delay(100);
   }
-}
-
-int getentropy(void *buffer, size_t length) {
-    return 0;
 }
 
 void *memset(void *b, int c, size_t len) {
