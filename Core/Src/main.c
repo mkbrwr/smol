@@ -115,7 +115,12 @@ int main(void)
   // HAL_UART_Receive_IT(&huart5, rx_buffer, RX_BUFFER_SIZE);
 
   lcd_init();
-  // SEGGER_RTT_Init();
+  SEGGER_RTT_Init();
+
+  // char* testVariable345 = (char*) malloc(24 * sizeof(char));
+
+  // void* testPtr = 0xD02FB000;
+  // int res = posix_memalign(testPtr, 8, sizeof(char) * 16);
 
   $$s6engine16startSwiftEngineyyF (); // startSwiftEngine()
 

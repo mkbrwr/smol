@@ -24,9 +24,14 @@ class Pixel {
     }
 
     init(argb: UInt32) {
+        //SEGGER_RTT_WriteString(0, "Pixel init")
         red = UInt8(truncatingIfNeeded: (argb & 0x00_ff0000) >> 16)
         green = UInt8(truncatingIfNeeded: (argb & 0x00_00ff00) >> 8)
         blue = UInt8(truncatingIfNeeded: (argb & 0x00_0000ff))
+    }
+
+    deinit {
+        //SEGGER_RTT_WriteString(0, "Pixel deinit")
     }
 }
 
@@ -58,18 +63,18 @@ class SwiftLogo: Sprite {
 
     var pixels: [Pixel] = []
 
-    init() {
-            for _ in 0 ..< 1000 {
-                pixels = []
-                for index in 0..<width * height {
-                    pixels.append(Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index))))
-                }
-            }
-        }
+    //init() {
+    //        //for _ in 0 ..< 1000 {
+    //            pixels = []
+    //            for index in 0..<width * height {
+    //                pixels.append()
+    //            }
+    //        //}
+    //    }
 
     subscript(index: Int) -> Pixel? {
         guard index < width * height else { return nil }
-        return pixels[index]
+        return Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index)))
     }
 }
 

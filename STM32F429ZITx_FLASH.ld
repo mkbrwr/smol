@@ -204,13 +204,5 @@ SECTIONS
     _esdram = .;        /* define a global symbol at data end */
   } >SDRAM
 
-  /* Remove information from the standard libraries */
-  /DISCARD/ :
-  {
-    libc.a ( * )
-    libm.a ( * )
-    libgcc.a ( * )
-  }
-
   .ARM.attributes 0 : { *(.ARM.attributes) }
 }

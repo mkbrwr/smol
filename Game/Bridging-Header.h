@@ -22,4 +22,7 @@ void screen_flush(void);
 // Swift Logo
 uint32_t getSwiftLogoPixelDataAt(uint32_t idx);
 
+// Debug
+unsigned SEGGER_RTT_WriteString(unsigned BufferIndex, const char* s);
+
 #endif

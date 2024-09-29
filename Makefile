@@ -20,6 +20,7 @@ GCC_PATH = /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin
 ######################################
 # C sources
 C_SOURCES =  \
+Support.c \
 Core/Src/fmc.c \
 Core/Src/spi.c \
 Core/Src/gpio.c \
@@ -122,7 +123,7 @@ CPU = -mcpu=cortex-m4
 FPU = -mfpu=fpv4-sp-d16
 
 # float-abi
-FLOAT-ABI = -mfloat-abi=hard
+FLOAT-ABI = -mfloat-abi=soft
 
 # mcu
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
@@ -174,11 +175,11 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.s=.lst)) $< -o $@
 
-$(BUILD_DIR)/engine.o: Game/engine.swift test_alloc.swift Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/engine.o: Game/engine.swift Makefile | $(BUILD_DIR)
 	swiftc -Xfrontend -disable-stack-protector -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
 	-import-bridging-header Game/Bridging-Header.h \
-	-Xcc -fno-stack-protector -Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=hard \
-    -c Game/engine.swift test_alloc.swift -o build/engine.o
+	-Xcc -fno-stack-protector -Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=soft \
+    -c Game/engine.swift -o build/engine.o
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
@@ -207,4 +208,4 @@ clean:
 # *** EOF ***
 
 stflash: $(BUILD_DIR)/$(TARGET).bin
-	st-flash --reset write $< 0x08000000
+	stm32-programmer-cli -c port=SWD -d $< 0x08000000 -v -rst
