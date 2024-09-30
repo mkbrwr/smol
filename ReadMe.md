@@ -2,8 +2,7 @@
 Drivers from STM example project, which are written in C, and Swift for application code.
 
 # Result
-https://github.com/user-attachments/assets/27305581-47a5-4122-8039-ab996999083c
-
+https://github.com/user-attachments/assets/a562994b-f260-4b2c-b294-3c59a71c14f7
 
 # Build
 export TOOLCHAINS='org.swift.61202409251a'
