@@ -6,7 +6,7 @@ TARGET = STM32SMOL
 # debug build?
 DEBUG = 1
 # optimization
-# OPT = -Og
+# OPT = -Os
 
 #######################################
 # paths

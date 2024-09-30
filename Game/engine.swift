@@ -1,14 +1,14 @@
 public func startSwiftEngine() {
     let engine = SwiftEngine()
-    var frameTimeMilliseconds = UInt32.max
+    //var frameTimeMilliseconds = UInt32.max
 
     engine.onCreate()
 
     while true {
-        frameTimeMilliseconds = HAL_GetTick()
+        //frameTimeMilliseconds = HAL_GetTick()
         engine.onUpdate()
-        frameTimeMilliseconds = HAL_GetTick() - frameTimeMilliseconds
-        SEGGER_RTT_WriteString(0, "Frame time: \(frameTimeMilliseconds) ms.")
+        //frameTimeMilliseconds = HAL_GetTick() - frameTimeMilliseconds
+        //SEGGER_RTT_WriteString(0, "Frame time: \(frameTimeMilliseconds) ms.")
     }
 }
 
@@ -20,6 +20,9 @@ struct Pixel {
     let blue: ColorComponent
 
     var argb: UInt32 {
+        if red == 0 && green == 0 && blue == 0 {
+            return UInt32(0x00_00_00_00) // transparent
+        }
         var uint32 = UInt32(0xff_00_00_00)
         uint32 |= UInt32(red) << 16
         uint32 |= UInt32(green) << 8
@@ -110,37 +113,26 @@ struct SpriteStore {
 final class Screen {
     let width: Int
     let height: Int
-    private var backgroundColor: Pixel = Pixel(argb: 0xffff_ffff)
+    let backgroundColor: Pixel
 
-    init(width: Int, height: Int) {
+    init(width: Int, height: Int, backgroundColor: Pixel) {
         self.width = width
         self.height = height
-    }
-
-    convenience init(width: Int, height: Int, backgroundColor: Pixel) {
-        self.init(width: width, height: height)
         self.backgroundColor = backgroundColor
-        screen_clear(backgroundColor.argb)
+        screen_init()
+        screen_fill_background(backgroundColor.argb)
     }
 
     func clear() {
-        screen_clear(backgroundColor.argb)
-    }
-
-    func clear(area rectangle: Rectangle) {
-        for x in rectangle.origin.x..<rectangle.origin.y + rectangle.size.width {
-            for y in rectangle.origin.y..<rectangle.origin.y + rectangle.size.height {
-                screen_write_pixel(UInt32(x), UInt32(y), backgroundColor.argb)
-            }
-        }
+        screen_fill_foreground(0x00000000)
     }
 
     func draw(_ pixel: Pixel, at: Point) {
-        screen_write_pixel(UInt32(at.x), UInt32(at.y), pixel.argb)
+        screen_write_pixel_foreground(UInt32(at.x), UInt32(at.y), pixel.argb)
     }
 
     func flush() {
-        screen_flush()
+        screen_flush_blend()
     }
 }
 
@@ -199,12 +191,12 @@ class Entity {
 
 final class SwiftEngine {
     private let renderer = SwiftRenderer(
-        screen: Screen(width: 240, height: 320, backgroundColor: Pixel(argb: 0xff00_0000)))
+        screen: Screen(width: 240, height: 320, backgroundColor: Pixel(argb: 0x00_65737e)))
 
-    var entities: [Entity] = [
+    let entities: [Entity] = [
         Entity(sprite: Sprite.swiftLogo, position: Point(x: 1, y: 1), direction: Vector(x: 2, y: 2)),
-        Entity(sprite: Sprite.swiftLogo, position: Point(x: 80, y: 80), direction: Vector(x: -2, y: 2)),
-        Entity(sprite: Sprite.swiftLogo, position: Point(x: 160, y: 160), direction: Vector(x: 2, y: -2)),
+        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 80, y: 80), direction: Vector(x: -2, y: 2)),
+        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 160, y: 160), direction: Vector(x: 2, y: -2)),
         //Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 40), direction: Vector(x: 3, y: 3)),
         //Entity(sprite: Sprite.swiftLogo, position: Point(x: 100, y: 40), direction: Vector(x: -3, y: 3)),
         //Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 140), direction: Vector(x: 3, y: -3)),
@@ -215,12 +207,14 @@ final class SwiftEngine {
     func onUpdate() {
         renderer.screen.clear()
         for entity in entities {
-            for otherEntity in entities where otherEntity.id != entity.id {
-                if entity.collides(with: otherEntity) {
-                    entity.reverseDirection()
-                    otherEntity.reverseDirection()
-                }
-            }
+            //for otherEntity in entities {
+            //    if otherEntity.id != entity.id {
+            //        if entity.collides(with: otherEntity) {
+            //            entity.reverseDirection()
+            //            otherEntity.reverseDirection()
+            //        }
+            //    }
+            //}
             if entity.position.x + entity.sprite.size.width >= 240 || entity.position.x <= 0 {
             entity.direction.x = -entity.direction.x
             }
