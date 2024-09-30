@@ -35,7 +35,7 @@ struct Pixel {
     }
 }
 
-class Point {
+struct Point {
     var x: Int
     var y: Int
 
@@ -44,7 +44,7 @@ class Point {
         self.y = y
     }
 
-    func offset(by: Point) -> Point {
+    mutating func offset(by: Point) -> Point {
         x += by.x
         y += by.y
         return self
@@ -61,27 +61,42 @@ struct Rectangle {
     let size: Size
 }
 
-protocol Sprite {
-    var width: Int { get }
-    var height: Int { get }
-    subscript(index: Int) -> Pixel? { get }
+enum Sprite {
+    case swiftLogo
+
+    var size: Size {
+        switch self {
+        case .swiftLogo:
+        return .init(width: 50, height: 50)
+        }
+    }
+
+    subscript(index: Int) -> Pixel {
+        store.pixels(for: self)[index]
+    }
 }
 
-class SwiftLogo: Sprite {
-    let width = 50
-    let height = 50
+fileprivate let store = SpriteStore()
 
-    private(set) var pixels: [Pixel] = []
+struct SpriteStore {
+    var contents: [Sprite] = []
+    private var pixels: [Pixel] = []
 
     init() {
-        for index in 0..<width * height {
+        loadSwiftLogo()
+    }
+
+    private mutating func loadSwiftLogo() {
+        let swiftLogo = Sprite.swiftLogo
+        contents.append(swiftLogo)
+        for index in 0..<swiftLogo.size.width * swiftLogo.size.height {
             pixels.append(Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index))))
         }
     }
 
-    subscript(index: Int) -> Pixel? {
-        guard index < width * height else { return nil }
-        return pixels[index]
+    func pixels(for sprite: Sprite) -> ArraySlice<Pixel> {
+        guard let spriteIndex = contents.firstIndex(of: sprite) else { fatalError("Sprite not loaded into memory!") }
+        return pixels[spriteIndex..<sprite.size.width * sprite.size.height]
     }
 }
 
@@ -131,19 +146,18 @@ final class SwiftRenderer {
         self.screen = screen
     }
 
-    func render(_ sprite: some Sprite, at origin: Point) {
-        for y in 0..<sprite.height {
-            for x in 0..<sprite.width {
-                let idx = y + x * sprite.width
-                if let pixel = sprite[idx] {
-                    screen.draw(pixel, at: Point(x: origin.x + x, y: origin.y + y))
-                }
+    func render(_ sprite: Sprite, at origin: Point) {
+        for y in 0..<sprite.size.height {
+            for x in 0..<sprite.size.width {
+                let idx = y + x * sprite.size.width
+                let pixel = sprite[idx]
+                screen.draw(pixel, at: Point(x: origin.x + x, y: origin.y + y))
             }
         }
     }
 }
 
-class Vector {
+struct Vector {
     var x: Int
     var y: Int
 
@@ -153,33 +167,45 @@ class Vector {
     }
 }
 
+class Entity {
+    let sprite: Sprite
+    var position: Point
+    var direction: Vector
+
+    init(sprite: Sprite, position: Point, direction: Vector) {
+        self.sprite = sprite
+        self.position = position
+        self.direction = direction
+    }
+}
+
 final class SwiftEngine {
     private let renderer = SwiftRenderer(
         screen: Screen(width: 240, height: 320, backgroundColor: Pixel(argb: 0xff00_0000)))
 
-    let logos = [
-        (sprite: SwiftLogo(), origin: Point(x: 10, y: 40), direction: Vector(x: 2, y: 2)),
-        (sprite: SwiftLogo(), origin: Point(x: 100, y: 40), direction: Vector(x: -2, y: 2)),
-        (sprite: SwiftLogo(), origin: Point(x: 10, y: 140), direction: Vector(x: 2, y: -2)),
-        (sprite: SwiftLogo(), origin: Point(x: 10, y: 40), direction: Vector(x: 3, y: 3)),
-        (sprite: SwiftLogo(), origin: Point(x: 100, y: 40), direction: Vector(x: -3, y: 3)),
-        (sprite: SwiftLogo(), origin: Point(x: 10, y: 140), direction: Vector(x: 3, y: -3)),
+    var entities: [Entity] = [
+        Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 40), direction: Vector(x: 2, y: 2)),
+        Entity(sprite: Sprite.swiftLogo, position: Point(x: 100, y: 40), direction: Vector(x: -2, y: 2)),
+        Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 140), direction: Vector(x: 2, y: -2)),
+        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 40), direction: Vector(x: 3, y: 3)),
+        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 100, y: 40), direction: Vector(x: -3, y: 3)),
+        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 140), direction: Vector(x: 3, y: -3)),
     ]
 
     func onCreate() {}
 
     func onUpdate() {
         renderer.screen.clear()
-        for logo in logos {
-            if logo.origin.x + logo.sprite.width >= 240 || logo.origin.x <= 0 {
-                logo.direction.x = -logo.direction.x
+        for entity in entities {
+            if entity.position.x + entity.sprite.size.width >= 240 || entity.position.x <= 0 {
+            entity.direction.x = -entity.direction.x
             }
-            if logo.origin.y + logo.sprite.height >= 320 || logo.origin.y <= 0 {
-                logo.direction.y = -logo.direction.y
+            if entity.position.y + entity.sprite.size.height >= 320 || entity.position.y <= 0 {
+                entity.direction.y = -entity.direction.y
             }
             renderer.render(
-                logo.sprite,
-                at: logo.origin.offset(by: Point(x: logo.direction.x, y: logo.direction.y)))
+                entity.sprite,
+                at: entity.position.offset(by: Point(x: entity.direction.x, y: entity.direction.y)))
         }
         renderer.screen.flush()
         Led.green.toggle()
