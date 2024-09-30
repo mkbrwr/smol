@@ -25,4 +25,12 @@ uint32_t getSwiftLogoPixelDataAt(uint32_t idx);
 // Debug
 unsigned SEGGER_RTT_WriteString(unsigned BufferIndex, const char* s);
 
+/**
+  * @brief Provides a tick value in millisecond.
+  * @note This function is declared as __weak to be overwritten in case of other
+  *       implementations in user file.
+  * @retval tick value
+  */
+uint32_t HAL_GetTick(void);
+
 #endif

@@ -117,11 +117,6 @@ int main(void)
   lcd_init();
   SEGGER_RTT_Init();
 
-  // char* testVariable345 = (char*) malloc(24 * sizeof(char));
-
-  // void* testPtr = 0xD02FB000;
-  // int res = posix_memalign(testPtr, 8, sizeof(char) * 16);
-
   $$s6engine16startSwiftEngineyyF (); // startSwiftEngine()
 
   while (1) {
