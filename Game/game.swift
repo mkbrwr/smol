@@ -1,5 +1,5 @@
 public func startSwiftEngine() {
-    struct CDontMangleMe {}
+    class CDontMangleMe {}
     var c: CDontMangleMe
     c = CDontMangleMe()
 
