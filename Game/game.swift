@@ -1,4 +1,12 @@
 public func startSwiftEngine() {
+    struct CDontMangleMe {}
+    var c: CDontMangleMe
+    c = CDontMangleMe()
+
+    for _ in 0..<20_000 {
+        c = CDontMangleMe()
+    }
+
     while true {
         HAL_Delay(1000)
         BSP_LED_Toggle(0)
