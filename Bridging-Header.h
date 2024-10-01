@@ -8,4 +8,10 @@ void BSP_LED_On(uint32_t Led);
 void BSP_LED_Off(uint32_t Led);
 void BSP_LED_Toggle(uint32_t Led);
 
+
+#include <stddef.h>
+
+void *malloc(size_t);
+void free(void*);
+
 #endif

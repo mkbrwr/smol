@@ -37,6 +37,7 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
+Support.c \
 Src/main.c \
 Src/gpio.c \
 Src/stm32f4xx_it.c \
@@ -183,7 +184,7 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/game.o: Game/game.swift Makefile | $(BUILD_DIR)
 	swiftc -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
 		-import-bridging-header Bridging-Header.h \
-   		-c Game/game.swift test_alloc.swift -o $(BUILD_DIR)/game.o
+   		-c Game/game.swift -o $(BUILD_DIR)/game.o
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@

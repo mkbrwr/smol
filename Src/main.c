@@ -32,8 +32,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define RED_LED   1
 #define GREEN_LED 0
+#define RED_LED   1
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
