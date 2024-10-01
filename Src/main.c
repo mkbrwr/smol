@@ -88,6 +88,9 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   BSP_LED_Init(GREEN_LED);
+  BSP_LED_Init(RED_LED);
+
+  $$s4game16startSwiftEngineyyF();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -96,7 +99,7 @@ int main(void)
   {
     /* USER CODE END WHILE */
     HAL_Delay(100);
-    BSP_LED_Toggle(GREEN_LED);
+    BSP_LED_Toggle(RED_LED);
     HAL_Delay(100);
 
     /* USER CODE BEGIN 3 */

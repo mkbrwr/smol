@@ -66,6 +66,9 @@ startup_stm32f429xx.s
 # ASM sources
 ASMM_SOURCES =
 
+# Swift sources
+SWIFT_SOUCES =  \
+Game/game.swift \
 
 #######################################
 # binaries
@@ -97,7 +100,7 @@ CPU = -mcpu=cortex-m4
 FPU = -mfpu=fpv4-sp-d16
 
 # float-abi
-FLOAT-ABI = -mfloat-abi=hard
+FLOAT-ABI = -mfloat-abi=soft
 
 # mcu
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
@@ -165,6 +168,8 @@ OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASMM_SOURCES:.S=.o)))
 vpath %.S $(sort $(dir $(ASMM_SOURCES)))
+# list of Swift objects
+OBJECTS += $(BUILD_DIR)/game.o
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
@@ -173,6 +178,11 @@ $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
 $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
+
+$(BUILD_DIR)/game.o: Game/game.swift Makefile | $(BUILD_DIR)
+	swiftc -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library -no-allocations \
+		-import-bridging-header Bridging-Header.h \
+   		-c Game/game.swift -o $(BUILD_DIR)/game.o
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
