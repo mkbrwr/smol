@@ -1,9 +1,11 @@
 public func startSwiftEngine() {
-    class CDontMangleMe {}
+    class CDontMangleMe {
+        let x = UInt32.random(in: 0x00..<0xffff_ffff)
+    }
     var c: CDontMangleMe
     c = CDontMangleMe()
 
-    for _ in 0..<20_000 {
+    for _ in 0..<1_000 {
         c = CDontMangleMe()
     }
 
