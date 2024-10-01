@@ -32,7 +32,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define RED_LED   1
+#define GREEN_LED 0
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -74,7 +75,6 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -87,7 +87,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+  BSP_LED_Init(GREEN_LED);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -95,6 +95,9 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+    HAL_Delay(100);
+    BSP_LED_Toggle(GREEN_LED);
+    HAL_Delay(100);
 
     /* USER CODE BEGIN 3 */
   }

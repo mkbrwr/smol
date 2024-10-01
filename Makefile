@@ -54,6 +54,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c \
+Drivers/STM32F429I-Discovery/stm32f429i_discovery.c \
 Src/system_stm32f4xx.c \
 Src/sysmem.c \
 Src/syscalls.c
@@ -119,6 +120,7 @@ C_INCLUDES =  \
 -IInc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
+-IDrivers/STM32F429I-Discovery/ \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include
 
@@ -195,5 +197,11 @@ clean:
 # dependencies
 #######################################
 -include $(wildcard $(BUILD_DIR)/*.d)
+
+#######################################
+# download to device
+#######################################
+stflash: $(BUILD_DIR)/$(TARGET).bin
+	stm32-programmer-cli -c port=SWD -d $< 0x08000000 -v -rst
 
 # *** EOF ***
