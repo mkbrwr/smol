@@ -2,9 +2,12 @@
 Drivers from STM example project, which are written in C, and Swift for application code.
 
 # Result
-https://github.com/user-attachments/assets/a562994b-f260-4b2c-b294-3c59a71c14f7
+https://github.com/user-attachments/assets/0ac91656-3581-465b-b653-f9f7dc9f7174
 
 # Build
+// Temporary note! 
+// Building requires building your own local toolchain with a fix for object deallocaiton
+// if not, program will run for a couple of seconds and then run out of memory
 export TOOLCHAINS='org.swift.61202409251a'
 make
 
