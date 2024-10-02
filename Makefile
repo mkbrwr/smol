@@ -93,7 +93,12 @@ AS_SOURCES =  \
 startup_stm32f429xx.s \
 
 SWIFT_SOURCES =  \
-Game/engine.swift \
+Game/Core.swift \
+Game/Engine.swift \
+Game/Renderer.swift \
+Game/Screen.swift \
+Game/Sprite.swift \
+Game/Utils.swift \
 
 #######################################
 # binaries
@@ -176,11 +181,11 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.s=.lst)) $< -o $@
 
-$(BUILD_DIR)/engine.o: Game/engine.swift Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/engine.o: $(SWIFT_SOURCES) Makefile | $(BUILD_DIR)
 	$(SWIFTC_PATH) -target armv7em-none-none-eabi -O -wmo -enable-experimental-feature Embedded -parse-as-library \
 	-import-bridging-header Bridging-Header.h \
 	-Xcc -fno-stack-protector -Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=soft \
-    -c Game/engine.swift -o build/engine.o
+    -c $(SWIFT_SOURCES) -o build/engine.o
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
