@@ -14,6 +14,7 @@ DEBUG = 1
 # Build path
 BUILD_DIR = build
 GCC_PATH = /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin
+SWIFTC_PATH = /Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-LOCAL-2024-10-02-a.xctoolchain/usr/bin/swiftc
 
 ######################################
 # source
@@ -176,8 +177,8 @@ $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.s=.lst)) $< -o $@
 
 $(BUILD_DIR)/engine.o: Game/engine.swift Makefile | $(BUILD_DIR)
-	swiftc -Xfrontend -disable-stack-protector -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
-	-import-bridging-header Game/Bridging-Header.h \
+	$(SWIFTC_PATH) -target armv7em-none-none-eabi -O -wmo -enable-experimental-feature Embedded -parse-as-library \
+	-import-bridging-header Bridging-Header.h \
 	-Xcc -fno-stack-protector -Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=soft \
     -c Game/engine.swift -o build/engine.o
 

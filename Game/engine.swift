@@ -148,7 +148,11 @@ final class SwiftRenderer {
             for x in 0..<sprite.size.width {
                 let idx = y + x * sprite.size.width
                 let pixel = sprite[idx]
-                screen.draw(pixel, at: Point(x: origin.x + x, y: origin.y + y))
+                let point = Point(x: origin.x + x, y: origin.y + y)
+                guard 0 < point.x && point.x < screen.width && 0 < point.y && point.y < screen.height else {
+                    continue
+                }
+                screen.draw(pixel, at: point)
             }
         }
     }
@@ -195,8 +199,8 @@ final class SwiftEngine {
 
     let entities: [Entity] = [
         Entity(sprite: Sprite.swiftLogo, position: Point(x: 1, y: 1), direction: Vector(x: 2, y: 2)),
-        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 80, y: 80), direction: Vector(x: -2, y: 2)),
-        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 160, y: 160), direction: Vector(x: 2, y: -2)),
+        Entity(sprite: Sprite.swiftLogo, position: Point(x: 80, y: 80), direction: Vector(x: -2, y: 2)),
+        Entity(sprite: Sprite.swiftLogo, position: Point(x: 160, y: 160), direction: Vector(x: 2, y: -2)),
         //Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 40), direction: Vector(x: 3, y: 3)),
         //Entity(sprite: Sprite.swiftLogo, position: Point(x: 100, y: 40), direction: Vector(x: -3, y: 3)),
         //Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 140), direction: Vector(x: 3, y: -3)),
@@ -207,14 +211,14 @@ final class SwiftEngine {
     func onUpdate() {
         renderer.screen.clear()
         for entity in entities {
-            //for otherEntity in entities {
-            //    if otherEntity.id != entity.id {
-            //        if entity.collides(with: otherEntity) {
-            //            entity.reverseDirection()
-            //            otherEntity.reverseDirection()
-            //        }
-            //    }
-            //}
+            for otherEntity in entities {
+                if otherEntity.id != entity.id {
+                    if entity.collides(with: otherEntity) {
+                        entity.reverseDirection()
+                        otherEntity.reverseDirection()
+                    }
+                }
+            }
             if entity.position.x + entity.sprite.size.width >= 240 || entity.position.x <= 0 {
             entity.direction.x = -entity.direction.x
             }
