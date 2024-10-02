@@ -1,4 +1,8 @@
-#include <stddef.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+int my_fatal_error(int code);
+extern void BSP_LED_On(uint32_t led);
 
 int posix_memalign(void **res, size_t align, size_t len)
 {
@@ -9,7 +13,7 @@ int posix_memalign(void **res, size_t align, size_t len)
 	return 0;
 }
 
-void my_fatal_error(int code) {
+int my_fatal_error(int code) {
     if (code == 21) {
         BSP_LED_On(0);
     } else if (code == 22) {
@@ -19,4 +23,5 @@ void my_fatal_error(int code) {
         BSP_LED_On(1);
     }
     while (1) {};
+    return -1;
 }
