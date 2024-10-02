@@ -182,7 +182,7 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/game.o: Game/game.swift Makefile | $(BUILD_DIR)
-	swiftc -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
+	/Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-LOCAL-2024-10-02-a.xctoolchain/usr/bin/swiftc -target armv7em-none-none-eabi -Osize -wmo -enable-experimental-feature Embedded -parse-as-library \
 		-import-bridging-header Bridging-Header.h \
    		-c Game/game.swift -o $(BUILD_DIR)/game.o
 

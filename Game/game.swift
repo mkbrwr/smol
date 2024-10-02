@@ -16,7 +16,7 @@ public func startSwiftEngine() {
     var c: CDontMangleMe
     c = CDontMangleMe()
 
-    for _ in 0..<1_000 {
+    for _ in 0..<200_000 {
         c = CDontMangleMe()
     }
 
