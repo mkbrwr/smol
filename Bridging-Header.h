@@ -26,7 +26,7 @@ void screen_write_pixel_foreground(uint32_t Xpos, uint32_t Ypos, uint32_t argb);
 void screen_write_pixel_background(uint32_t Xpos, uint32_t Ypos, uint32_t argb);
 void screen_flush_blend(void);
 
-// Swift Logo
+// Sprites
 uint32_t getSwiftLogoPixelDataAt(uint32_t idx);
 
 

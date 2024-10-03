@@ -1,5 +1,3 @@
-private let store = SpriteStore()
-
 enum Sprite {
     case swiftLogo
 
@@ -11,30 +9,14 @@ enum Sprite {
     }
 
     subscript(index: Int) -> Pixel {
-        store.pixels(for: self)[index]
-    }
-}
-
-struct SpriteStore {
-    var contents: [Sprite] = []
-    private var pixels: [Pixel] = []
-
-    init() {
-        loadSwiftLogo()
+        guard index < size.width * size.height else { return Pixel(argb: 0xff_ff_ff_ff) }
+        return Pixel(argb: accessorFunc(UInt32(index)))
     }
 
-    private mutating func loadSwiftLogo() {
-        let swiftLogo = Sprite.swiftLogo
-        contents.append(swiftLogo)
-        for index in 0..<swiftLogo.size.width * swiftLogo.size.height {
-            pixels.append(Pixel(argb: getSwiftLogoPixelDataAt(UInt32(index))))
+    private var accessorFunc: (UInt32) -> (UInt32) {
+        switch self {
+            case .swiftLogo:
+            return getSwiftLogoPixelDataAt
         }
-    }
-
-    func pixels(for sprite: Sprite) -> ArraySlice<Pixel> {
-        guard let spriteIndex = contents.firstIndex(of: sprite) else {
-            fatalError("Sprite not loaded into memory!")
-        }
-        return pixels[spriteIndex..<sprite.size.width * sprite.size.height]
     }
 }
