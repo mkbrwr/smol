@@ -19,13 +19,10 @@ unsigned SEGGER_RTT_WriteString(unsigned BufferIndex, const char* s);
 uint32_t HAL_GetTick(void);
 
 // From screen.h
-void screen_init(void);
-void screen_fill_foreground(uint32_t argb);
-void screen_fill_background(uint32_t argb);
-void screen_write_pixel_foreground(uint32_t Xpos, uint32_t Ypos, uint32_t argb);
-void screen_write_pixel_background(uint32_t Xpos, uint32_t Ypos, uint32_t argb);
-void screen_flush_blend(void);
-
+void screen_init(uint32_t clear_color);
+void screen_clear();
+void screen_write_pixel(uint32_t Xpos, uint32_t Ypos, uint32_t color);
+void screen_flush();
 // Sprites
 uint32_t getSwiftLogoPixelDataAt(uint32_t idx);
 

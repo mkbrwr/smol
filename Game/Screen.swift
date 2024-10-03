@@ -28,25 +28,39 @@ struct Pixel {
 final class Screen {
     let width: Int
     let height: Int
-    let backgroundColor: Pixel
 
-    init(width: Int, height: Int, backgroundColor: Pixel) {
+    init(width: Int, height: Int) {
         self.width = width
         self.height = height
-        self.backgroundColor = backgroundColor
-        screen_init()
-        screen_fill_background(backgroundColor.argb)
+        screen_init(0xff000000)
+        screen_clear()
     }
 
     func clear() {
-        screen_fill_foreground(0x0000_0000)
+        screen_clear();
     }
 
-    func draw(_ pixel: Pixel, at: Point) {
-        screen_write_pixel_foreground(UInt32(at.x), UInt32(at.y), pixel.argb)
+    func add(_ sprite: Sprite, at origin: Point) {
+        for y in 0..<sprite.size.height {
+            for x in 0..<sprite.size.width {
+                let idx = y + x * sprite.size.width
+                let pixel = sprite[idx]
+                let point = Point(x: origin.x + x, y: origin.y + y)
+                guard
+                    0 < point.x && point.x < width && 0 < point.y && point.y < height
+                else {
+                    continue
+                }
+                draw(pixel, at: point)
+            }
+        }
     }
 
     func flush() {
-        screen_flush_blend()
+        screen_flush()
+    }
+
+    private func draw(_ pixel: Pixel, at: Point) {
+        screen_write_pixel(UInt32(at.x), UInt32(at.y), pixel.argb)
     }
 }

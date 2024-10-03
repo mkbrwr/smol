@@ -6,7 +6,7 @@ TARGET = STM32SMOL
 # debug build?
 DEBUG = 1
 # optimization
-# OPT = -Os
+OPT = -O
 
 #######################################
 # paths
@@ -95,7 +95,6 @@ startup_stm32f429xx.s \
 SWIFT_SOURCES =  \
 Game/Core.swift \
 Game/Engine.swift \
-Game/Renderer.swift \
 Game/Screen.swift \
 Game/Sprite.swift \
 Game/Utils.swift \

@@ -1,14 +1,18 @@
 public func startSwiftEngine() {
     let engine = SwiftEngine()
-    //var frameTimeMilliseconds = Int.max
+    var frameTimeMilliseconds = Int.max
 
     engine.onCreate()
 
     while true {
-        //frameTimeMilliseconds = HAL.getTick()
+        frameTimeMilliseconds = HAL.getTick()
         engine.onUpdate()
-        //frameTimeMilliseconds = HAL.getTick() - frameTimeMilliseconds
-        //RTT.writeString("Frame time: \(frameTimeMilliseconds) ms.")
+        frameTimeMilliseconds = HAL.getTick() - frameTimeMilliseconds
+        if frameTimeMilliseconds > 33 {
+            Led.red.on()
+        } else {
+            Led.red.off()
+        }
     }
 }
 
@@ -46,8 +50,7 @@ class Entity {
 }
 
 final class SwiftEngine {
-    private let renderer = Renderer(
-        screen: Screen(width: 240, height: 320, backgroundColor: Pixel(argb: 0x00_65737e)))
+    private let screen = Screen(width: 240, height: 320)
 
     var entities: [Entity] = [
         Entity(sprite: Sprite.swiftLogo, position: Point(x: 1, y: 1), direction: Vector(x: 2, y: 2))
@@ -56,31 +59,30 @@ final class SwiftEngine {
     func onCreate() {}
 
     func onUpdate() {
+        screen.clear()
         while !inputs.isEmpty {
             reactToInput(inputs.dequeue()!)
         }
-        renderer.screen.clear()
         for entity in entities {
-            for otherEntity in entities {
-                if otherEntity.id != entity.id {
-                    if entity.collides(with: otherEntity) {
-                        entity.reverseDirection()
-                        otherEntity.reverseDirection()
-                    }
-                }
-            }
+            //for otherEntity in entities {
+            //    if otherEntity.id != entity.id {
+            //        if entity.collides(with: otherEntity) {
+            //            entity.reverseDirection()
+            //            otherEntity.reverseDirection()
+            //        }
+            //    }
+            //}
             if entity.position.x + entity.sprite.size.width >= 240 || entity.position.x <= 0 {
                 entity.direction.x = -entity.direction.x
             }
             if entity.position.y + entity.sprite.size.height >= 320 || entity.position.y <= 0 {
                 entity.direction.y = -entity.direction.y
             }
-            renderer.render(
+            screen.add(
                 entity.sprite,
                 at: entity.position.offset(by: Point(x: entity.direction.x, y: entity.direction.y)))
         }
-        renderer.screen.flush()
-        Led.green.toggle()
+        screen.flush()
     }
 
     func reactToInput(_ input: Input) {

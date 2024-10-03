@@ -10,6 +10,24 @@ enum Led {
             BSP_LED_Toggle(GREEN_LED)
         }
     }
+
+    func on() {
+        switch self {
+        case .red:
+            BSP_LED_On(RED_LED)
+        case .green:
+            BSP_LED_On(GREEN_LED)
+        }
+    }
+
+    func off() {
+        switch self {
+        case .red:
+            BSP_LED_Off(RED_LED)
+        case .green:
+            BSP_LED_Off(GREEN_LED)
+        }
+    }
 }
 
 enum RTT {
