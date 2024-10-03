@@ -98,9 +98,6 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    HAL_Delay(100);
-    BSP_LED_Toggle(RED_LED);
-    HAL_Delay(100);
 
     /* USER CODE BEGIN 3 */
   }
@@ -154,7 +151,14 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(GPIO_Pin == B1_Pin) {
+      BSP_LED_Toggle(RED_LED);
+  } else {
+      __NOP();
+  }
+}
 /* USER CODE END 4 */
 
 /**
