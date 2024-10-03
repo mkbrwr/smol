@@ -40,7 +40,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define LOG_TO_OLED 0
 
 /* USER CODE END PD */
 
@@ -110,6 +109,8 @@ int main(void)
 
   BSP_LED_Init(LED3);
   BSP_LED_Init(LED4);
+  BSP_PB_Init(BUTTON_KEY, BUTTON_MODE_EXTI);
+
 
   // TODO: implement user input using interrupts
   // HAL_UART_Receive_IT(&huart5, rx_buffer, RX_BUFFER_SIZE);
@@ -360,6 +361,15 @@ void logEngineTickTime(uint16_t *engineTickTime)
     ssd1306_WriteString(frameTimeString, Font_11x18, White);
     ssd1306_UpdateScreen(&hi2c3);
   #endif
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  if(GPIO_Pin == B1_Pin) {
+      $$s6engine15handleUserInputyys6UInt32VF(42);
+  } else {
+      __NOP();
+  }
 }
 /* USER CODE END 4 */
 

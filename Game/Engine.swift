@@ -1,19 +1,27 @@
 public func startSwiftEngine() {
     let engine = SwiftEngine()
-    var frameTimeMilliseconds = UInt32.max
+    //var frameTimeMilliseconds = Int.max
 
     engine.onCreate()
 
     while true {
-        frameTimeMilliseconds = HAL_GetTick()
+        //frameTimeMilliseconds = HAL.getTick()
         engine.onUpdate()
-        frameTimeMilliseconds = HAL_GetTick() - frameTimeMilliseconds
-        SEGGER_RTT_WriteString(0, "Frame time: \(frameTimeMilliseconds) ms.")
+        //frameTimeMilliseconds = HAL.getTick() - frameTimeMilliseconds
+        //RTT.writeString("Frame time: \(frameTimeMilliseconds) ms.")
+    }
+}
+
+var inputs = Queue<Input>()
+
+public func handleUserInput(_ code: UInt32) {
+    if let input = Input(code: code) {
+        inputs.enqueue(input)
     }
 }
 
 class Entity {
-    var id = UInt32.random(in: 0x0..<0xffff_ffff)
+    var id = UInt8.random(in: 1...255)
     let sprite: Sprite
     var position: Point
     var direction: Vector
@@ -41,22 +49,16 @@ final class SwiftEngine {
     private let renderer = Renderer(
         screen: Screen(width: 240, height: 320, backgroundColor: Pixel(argb: 0x00_65737e)))
 
-    let entities: [Entity] = [
-        Entity(
-            sprite: Sprite.swiftLogo, position: Point(x: 1, y: 1), direction: Vector(x: 2, y: 2)),
-        Entity(
-            sprite: Sprite.swiftLogo, position: Point(x: 80, y: 80), direction: Vector(x: -2, y: 2)),
-        Entity(
-            sprite: Sprite.swiftLogo, position: Point(x: 160, y: 160),
-            direction: Vector(x: 2, y: -2)),
-        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 40), direction: Vector(x: 3, y: 3)),
-        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 100, y: 40), direction: Vector(x: -3, y: 3)),
-        //Entity(sprite: Sprite.swiftLogo, position: Point(x: 10, y: 140), direction: Vector(x: 3, y: -3)),
+    var entities: [Entity] = [
+        Entity(sprite: Sprite.swiftLogo, position: Point(x: 1, y: 1), direction: Vector(x: 2, y: 2))
     ]
 
     func onCreate() {}
 
     func onUpdate() {
+        while !inputs.isEmpty {
+            reactToInput(inputs.dequeue()!)
+        }
         renderer.screen.clear()
         for entity in entities {
             for otherEntity in entities {
@@ -81,6 +83,15 @@ final class SwiftEngine {
         Led.green.toggle()
     }
 
-    // TODO:
-    //func onUserInput(input: [Input])
+    func reactToInput(_ input: Input) {
+        switch input {
+        case .blueButton:
+            let origin = Point(x: Int.random(in: 1...180), y: Int.random(in: 1...260))
+            let direction = Vector(x: Int.random(in: -2...2), y: Int.random(in: -2...2))
+            let entity = Entity(sprite: Sprite.swiftLogo, position: origin, direction: direction)
+            entities.append(entity)
+        default:
+            RTT.writeString("default input handler")
+        }
+    }
 }

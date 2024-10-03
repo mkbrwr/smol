@@ -57,6 +57,7 @@ void PendSV_Handler(void);
 void SysTick_Handler(void);
 void UART5_IRQHandler(void);
 void DMA2D_IRQHandler(void);
+void EXTI0_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */

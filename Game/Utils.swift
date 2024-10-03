@@ -11,3 +11,15 @@ enum Led {
         }
     }
 }
+
+enum RTT {
+    static func writeString(_ s: String) {
+        SEGGER_RTT_WriteString(0, s)
+    }
+}
+
+enum HAL {
+    static func getTick() -> Int {
+        Int(HAL_GetTick())
+    }
+}

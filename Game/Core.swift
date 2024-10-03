@@ -41,3 +41,46 @@ struct Rectangle {
         return isHorizontalOverlap && isVerticalOverlap
     }
 }
+
+enum Input {
+    case buttonA
+    case buttonB
+    case blueButton
+
+    init?(code: UInt32) {
+        switch code {
+            case 42:
+                self = .blueButton
+            case 12:
+                self = .buttonA
+            case 13:
+                self = .buttonB
+            default:
+                return nil
+        }
+    }
+}
+
+struct Queue<Element> {
+    private var store: [Element] = []
+
+    mutating func enqueue(_ e: Element) {
+        store.append(e)
+    }
+
+    mutating func dequeue() -> Element? {
+        store.removeFirst()
+    }
+
+    func peek() -> Element? {
+        store.first
+    }
+
+    var isFull: Bool {
+        false
+    }
+
+    var isEmpty: Bool {
+        store.isEmpty
+    }
+}
