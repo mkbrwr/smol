@@ -60,7 +60,6 @@ final class SwiftEngine {
     }
 
     func onUpdate() {
-        screen.clear()
         while !inputs.isEmpty {
             reactToInput(inputs.dequeue()!)
         }
