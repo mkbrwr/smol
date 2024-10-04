@@ -300,11 +300,13 @@ void lcd_init(void) {
   BSP_LCD_SelectLayer(1);
   /* Clear the LCD */
   BSP_LCD_Clear(LCD_COLOR_WHITE);
-  BSP_LCD_SetColorKeying(1, LCD_COLOR_WHITE);
+  // BSP_LCD_SetColorKeying(1, LCD_COLOR_WHITE);
   BSP_LCD_SetLayerVisible(1, DISABLE);
 
   /* Layer1 Init */
   BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER_LAYER0);
+
+  BSP_LCD_SetLayerVisible(0, ENABLE);
 
   /* Set Foreground Layer */
   BSP_LCD_SelectLayer(0);

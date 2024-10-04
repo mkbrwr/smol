@@ -48,8 +48,12 @@ final class Screen {
         }
     }
 
-    func showFrame() {
-        show_frame()
+    func clear() {
+        screen_clear(0xff00ff00)
+    }
+
+    func flush() {
+        screen_flush()
     }
 
     private func draw(_ pixel: Pixel, at: Point) {

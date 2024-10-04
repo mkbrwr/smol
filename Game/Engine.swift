@@ -60,6 +60,7 @@ final class SwiftEngine {
     }
 
     func onUpdate() {
+        screen.clear()
         while !inputs.isEmpty {
             reactToInput(inputs.dequeue()!)
         }
@@ -82,7 +83,7 @@ final class SwiftEngine {
                 entity.sprite,
                 at: entity.position.offset(by: Point(x: entity.direction.x, y: entity.direction.y)))
         }
-        screen.showFrame()
+        screen.flush()
     }
 
     func reactToInput(_ input: Input) {
