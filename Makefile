@@ -14,7 +14,13 @@ OPT = -O
 # Build path
 BUILD_DIR = build
 GCC_PATH = /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin
-SWIFTC_PATH = /Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-LOCAL-2024-10-02-a.xctoolchain/usr/bin/swiftc
+
+# LOCAL
+# SWIFTC_PATH_LOCAL = /Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-LOCAL-2024-10-02-a.xctoolchain/usr/bin/swiftc
+# Release 6.0.1
+SWIFTC_PATH_RELEASE = /Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-6.0.1-RELEASE.xctoolchain/usr/bin/swiftc
+# Dev snapshot
+# SWIFTC_PATH_DEV = /Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-09-25-a.xctoolchain/usr/bin/swiftc
 
 ######################################
 # source
@@ -181,7 +187,7 @@ $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.s=.lst)) $< -o $@
 
 $(BUILD_DIR)/engine.o: $(SWIFT_SOURCES) Makefile | $(BUILD_DIR)
-	$(SWIFTC_PATH) -target armv7em-none-none-eabi -O -wmo -enable-experimental-feature Embedded -parse-as-library \
+	$(SWIFTC_PATH_RELEASE) -target armv7em-none-none-eabi -O -wmo -enable-experimental-feature Embedded -parse-as-library \
 	-import-bridging-header Bridging-Header.h \
 	-Xcc -fno-stack-protector -Xcc -ffreestanding -Xcc -fdata-sections -Xcc -ffunction-sections -Xcc -mcpu=cortex-m4 -Xcc -mthumb -Xcc -mfpu=fpv4-sp-d16 -Xcc -mfloat-abi=soft \
     -c $(SWIFT_SOURCES) -o build/engine.o

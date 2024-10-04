@@ -19,8 +19,7 @@ unsigned SEGGER_RTT_WriteString(unsigned BufferIndex, const char* s);
 uint32_t HAL_GetTick(void);
 
 // From screen.h
-void screen_init(uint32_t clear_color);
-void screen_clear();
+void screen_clear(uint32_t color);
 void screen_write_pixel(uint32_t Xpos, uint32_t Ypos, uint32_t color);
 void screen_flush();
 // Sprites

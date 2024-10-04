@@ -56,7 +56,8 @@ final class SwiftEngine {
         Entity(sprite: Sprite.swiftLogo, position: Point(x: 1, y: 1), direction: Vector(x: 2, y: 2))
     ]
 
-    func onCreate() {}
+    func onCreate() {
+    }
 
     func onUpdate() {
         screen.clear()
@@ -82,7 +83,7 @@ final class SwiftEngine {
                 entity.sprite,
                 at: entity.position.offset(by: Point(x: entity.direction.x, y: entity.direction.y)))
         }
-        screen.flush()
+        screen.showFrame()
     }
 
     func reactToInput(_ input: Input) {
@@ -93,7 +94,8 @@ final class SwiftEngine {
             let entity = Entity(sprite: Sprite.swiftLogo, position: origin, direction: direction)
             entities.append(entity)
         default:
-            RTT.writeString("default input handler")
+            return
+            //RTT.writeString("default input handler")
         }
     }
 }

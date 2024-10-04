@@ -32,12 +32,6 @@ final class Screen {
     init(width: Int, height: Int) {
         self.width = width
         self.height = height
-        screen_init(0xff000000)
-        screen_clear()
-    }
-
-    func clear() {
-        screen_clear();
     }
 
     func add(_ sprite: Sprite, at origin: Point) {
@@ -46,9 +40,7 @@ final class Screen {
                 let idx = y + x * sprite.size.width
                 let pixel = sprite[idx]
                 let point = Point(x: origin.x + x, y: origin.y + y)
-                guard
-                    0 < point.x && point.x < width && 0 < point.y && point.y < height
-                else {
+                guard 0..<width ~= point.x && 0..<height ~= point.y else {
                     continue
                 }
                 draw(pixel, at: point)
@@ -56,7 +48,11 @@ final class Screen {
         }
     }
 
-    func flush() {
+    func clear() {
+        screen_clear(0xff000000);
+    }
+
+    func showFrame() {
         screen_flush()
     }
 

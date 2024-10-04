@@ -31,9 +31,9 @@ enum Led {
 }
 
 enum RTT {
-    static func writeString(_ s: String) {
-        SEGGER_RTT_WriteString(0, s)
-    }
+    //static func writeString(_ s: String) {
+    //    SEGGER_RTT_WriteString(0, s)
+    //}
 }
 
 enum HAL {
