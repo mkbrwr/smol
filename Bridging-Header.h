@@ -21,6 +21,7 @@ uint32_t HAL_GetTick(void);
 // From screen.h
 void screen_clear(uint32_t color);
 void screen_write_pixel(uint32_t Xpos, uint32_t Ypos, uint32_t color);
+uint32_t screen_read_pixel(uint32_t Xpos, uint32_t Ypos);
 void screen_flush();
 
 // Sprites

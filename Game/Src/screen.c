@@ -68,6 +68,10 @@ void screen_write_pixel(uint32_t Xpos, uint32_t Ypos, uint32_t color) {
    screen_buffer[Ypos][SCREEN_HEIGHT - Xpos] = color;
 }
 
+uint32_t screen_read_pixel(uint32_t Xpos, uint32_t Ypos) {
+    return screen_buffer[Ypos][SCREEN_HEIGHT - Xpos];
+}
+
 void screen_flush() {
     prepare_dma2d_for_mem2mem();
     if (HAL_DMA2D_Start(&hdma2d, screen_buffer, LAYER1_ADDRESS, 240, 320) != HAL_OK) {}

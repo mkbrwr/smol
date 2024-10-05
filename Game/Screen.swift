@@ -1,6 +1,6 @@
 typealias ColorComponent = UInt8
 
-struct Pixel {
+struct Pixel: Equatable {
     let red: ColorComponent
     let green: ColorComponent
     let blue: ColorComponent
@@ -41,6 +41,7 @@ final class Screen {
                 guard 0..<width ~= point.x && 0..<height ~= point.y else {
                     continue
                 }
+                guard readPixel(at: point) == background else { continue }
                 draw(pixel, at: point)
             }
         }
@@ -56,5 +57,9 @@ final class Screen {
 
     private func draw(_ pixel: Pixel, at: Point) {
         screen_write_pixel(UInt32(at.x), UInt32(at.y), pixel.argb);
+    }
+
+    private func readPixel(at point: Point) -> Pixel {
+        Pixel(argb: screen_read_pixel(UInt32(point.x), UInt32(point.y)))
     }
 }
