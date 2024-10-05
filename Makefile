@@ -77,7 +77,9 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sdram.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dsi.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
 Game/Src/screen.c \
-Game/Src/PixelData.c \
+Game/Assets/Alien.c \
+Game/Assets/SwiftLogo.c \
+Game/Assets/Zombie.c \
 
 C_INCLUDES =  \
 -Ibuild \

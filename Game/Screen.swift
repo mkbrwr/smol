@@ -6,9 +6,6 @@ struct Pixel {
     let blue: ColorComponent
 
     var argb: UInt32 {
-        if red == 0 && green == 0 && blue == 0 {
-            return UInt32(0x00_00_00_00)  // transparent
-        }
         var uint32 = UInt32(0xff_00_00_00)
         uint32 |= UInt32(red) << 16
         uint32 |= UInt32(green) << 8
@@ -28,17 +25,18 @@ struct Pixel {
 final class Screen {
     let width: Int
     let height: Int
+    var background: Pixel = Pixel(argb: 0xff000000);
 
     init(width: Int, height: Int) {
         self.width = width
         self.height = height
     }
 
-    func add(_ sprite: Sprite, at origin: Point) {
+    func add(_ sprite: Sprite, at origin: Point, rotation: Rotation = .none) {
         for y in 0..<sprite.size.height {
             for x in 0..<sprite.size.width {
                 let idx = y + x * sprite.size.width
-                let pixel = sprite[idx]
+                let pixel = sprite.pixel(at: idx, rotation: rotation)
                 let point = Point(x: origin.x + x, y: origin.y + y)
                 guard 0..<width ~= point.x && 0..<height ~= point.y else {
                     continue
@@ -49,14 +47,14 @@ final class Screen {
     }
 
     func clear() {
-        screen_clear(0xff00ff00)
+        screen_clear(background.argb);
     }
 
     func flush() {
-        screen_flush()
+        screen_flush();
     }
 
     private func draw(_ pixel: Pixel, at: Point) {
-        screen_write_pixel(UInt32(at.x), UInt32(at.y), pixel.argb)
+        screen_write_pixel(UInt32(at.x), UInt32(at.y), pixel.argb);
     }
 }

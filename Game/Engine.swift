@@ -2,8 +2,6 @@ public func startSwiftEngine() {
     let engine = SwiftEngine()
     var frameTimeMilliseconds = Int.max
 
-    engine.onCreate()
-
     while true {
         frameTimeMilliseconds = HAL.getTick()
         engine.onUpdate()
@@ -24,19 +22,22 @@ public func handleUserInput(_ code: UInt32) {
     }
 }
 
-class Entity {
+final class Entity {
     var id = UInt8.random(in: 1...255)
     let sprite: Sprite
-    var position: Point
-    var direction: Vector
-    var body: Rectangle {
-        Rectangle(origin: position, size: sprite.size)
+    var position: Point {
+        didSet {
+            self.body = Rectangle(origin: position, size: sprite.size)
+        }
     }
+    var direction: Vector
+    var body: Rectangle
 
     init(sprite: Sprite, position: Point, direction: Vector) {
         self.sprite = sprite
         self.position = position
         self.direction = direction
+        self.body = Rectangle(origin: position, size: sprite.size)
     }
 
     func collides(with other: Entity) -> Bool {
@@ -55,9 +56,6 @@ final class SwiftEngine {
     var entities: [Entity] = [
         Entity(sprite: Sprite.swiftLogo, position: Point(x: 1, y: 1), direction: Vector(x: 2, y: 2))
     ]
-
-    func onCreate() {
-    }
 
     func onUpdate() {
         screen.clear()
@@ -81,7 +79,8 @@ final class SwiftEngine {
             }
             screen.add(
                 entity.sprite,
-                at: entity.position.offset(by: Point(x: entity.direction.x, y: entity.direction.y)))
+                at: entity.position.offset(by: Point(x: entity.direction.x, y: entity.direction.y)),
+                rotation: .none)
         }
         screen.flush()
     }
@@ -89,9 +88,10 @@ final class SwiftEngine {
     func reactToInput(_ input: Input) {
         switch input {
         case .blueButton:
+            let sprite: Sprite = if Bool.random() { Sprite.alien } else { .zombie }
             let origin = Point(x: Int.random(in: 1...180), y: Int.random(in: 1...260))
             let direction = Vector(x: Int.random(in: -2...2), y: Int.random(in: -2...2))
-            let entity = Entity(sprite: Sprite.swiftLogo, position: origin, direction: direction)
+            let entity = Entity(sprite: sprite, position: origin, direction: direction)
             entities.append(entity)
         default:
             return

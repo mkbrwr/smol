@@ -25,6 +25,8 @@ void screen_flush();
 
 // Sprites
 uint32_t getSwiftLogoPixelDataAt(uint32_t idx);
+uint32_t getAlienPixelDataAt(uint32_t idx);
+uint32_t getZombiePixelDataAt(uint32_t idx);
 
 
 #endif
