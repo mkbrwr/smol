@@ -16,7 +16,7 @@ enum Sprite {
 
     private var defaultRotation: Rotation {
         switch self {
-            case .swiftLogo: return .none
+            case .swiftLogo: return .degree270
             case .alien: return .degree90
             case .zombie: return .degree270
         }

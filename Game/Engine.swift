@@ -32,6 +32,7 @@ final class Entity {
     }
     var direction: Vector
     var body: Rectangle
+    var markedForDeletion = false
 
     init(sprite: Sprite, position: Point, direction: Vector) {
         self.sprite = sprite
@@ -58,19 +59,17 @@ final class SwiftEngine {
     ]
 
     func onUpdate() {
+        entities = entities.filter { $0.markedForDeletion  == false }
         screen.clear()
         while !inputs.isEmpty {
             reactToInput(inputs.dequeue()!)
         }
         for entity in entities {
-            //for otherEntity in entities {
-            //    if otherEntity.id != entity.id {
-            //        if entity.collides(with: otherEntity) {
-            //            entity.reverseDirection()
-            //            otherEntity.reverseDirection()
-            //        }
-            //    }
-            //}
+            for otherEntity in entities[1...] {
+                if entities[0].collides(with: otherEntity) {
+                    otherEntity.markedForDeletion = true
+                }
+            }
             if entity.position.x + entity.sprite.size.width >= 240 || entity.position.x <= 0 {
                 entity.direction.x = -entity.direction.x
             }
