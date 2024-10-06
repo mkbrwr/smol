@@ -16,11 +16,11 @@ BUILD_DIR = build
 GCC_PATH = /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin
 
 # LOCAL
-# SWIFTC_PATH_LOCAL = /Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-LOCAL-2024-10-02-a.xctoolchain/usr/bin/swiftc
+# SWIFTC_PATH_LOCAL = ~/Library/Developer/Toolchains/swift-LOCAL-2024-10-02-a.xctoolchain/usr/bin/swiftc
 # Release 6.0.1
-SWIFTC_PATH_RELEASE = /Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-6.0.1-RELEASE.xctoolchain/usr/bin/swiftc
+SWIFTC_PATH_RELEASE = ~/Library/Developer/Toolchains/swift-6.0.1-RELEASE.xctoolchain/usr/bin/swiftc
 # Dev snapshot
-# SWIFTC_PATH_DEV = /Users/mykhailotymchyshyn/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-09-25-a.xctoolchain/usr/bin/swiftc
+# SWIFTC_PATH_DEV = ~/Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-2024-09-25-a.xctoolchain/usr/bin/swiftc
 
 ######################################
 # source

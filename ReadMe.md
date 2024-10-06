@@ -19,3 +19,6 @@ pyocd rtt --address 0x200009dc
 
 0x200009dc is an address from .map file for .bss._SEGGER_RTT
 And can change when code is changed.
+
+# Generate compile_commands.json
+cmake -B build -G Ninja . && mv build/compile_commands.json ~/Embedded/ST/STM32SMOL/compile_commands.json && rm -rf build
